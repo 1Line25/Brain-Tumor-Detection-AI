@@ -1,0 +1,575 @@
+filepath,label
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m3 (152).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image (43).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (564).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m1(142).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (415).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (64).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image (31).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (310).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (819).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (511).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image(16).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m (92).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image (19).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (426).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image(249).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (803).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (110).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (582).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (512).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m2 (82).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m (6).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (339).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (681).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m3 (26).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (391).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (127).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m (134).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (139).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (788).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (217).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (288).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image(45).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image(168).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m1(77).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image(179).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m (162).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (507).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (122).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (9).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m2 (39).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (319).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m (9).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m2 (95).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (466).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (662).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (51).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image(102).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (128).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m1(114).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (227).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (712).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m3 (12).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (54).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (793).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m3 (15).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m1(71).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (479).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image(156).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (60).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (303).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m3 (155).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m1(75).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (418).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (47).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m2 (9).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (376).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (421).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (365).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m2 (160).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (465).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (541).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (691).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m (147).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image(131).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (61).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image (39).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (656).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (381).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (298).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image(88).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (714).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (469).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (40).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (634).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (99).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (493).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (425).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m (192).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m3 (55).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m (161).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m3 (168).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m3 (38).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (444).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (436).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image (57).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (822).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m1(92).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (45).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m2 (46).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m1(20).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (579).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (497).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (777).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (43).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (135).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (408).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (269).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (233).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (261).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (215).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (132).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image(170).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (71).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (63).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (591).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (676).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m2 (175).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m2 (122).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (572).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (706).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (562).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (356).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (57).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (22).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (779).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (330).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image(167).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image (14).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m3 (20).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (718).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image(327).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (750).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (502).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (641).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (185).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (147).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (140).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (625).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (654).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (205).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image(18).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m (115).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image(68).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (392).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (178).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m1(168).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image(298).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image(157).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (818).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image (18).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (583).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m1(97).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (658).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (272).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m1(147).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image(261).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m (66).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (732).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (315).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image(21).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m3 (124).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (285).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (214).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m (187).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (437).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m (22).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (62).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image(173).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (571).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (4).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (740).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m2 (123).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m (84).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image(1).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (508).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (810).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m (138).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (405).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m3 (211).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m (2).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (508).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m1(30).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (225).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m2 (173).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (244).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image(313).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (229).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (712).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (365).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m2 (34).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m2 (59).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (545).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (588).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (680).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image (9).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (326).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\4.jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (786).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (95).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (274).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m3 (44).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m2 (57).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (226).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m2 (150).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m (26).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m1(48).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image(146).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m3 (101).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m (3).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m2 (121).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m (85).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (341).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (424).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (641).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image(216).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (784).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (360).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (785).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m3 (50).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (189).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (485).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (6).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (419).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (564).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m1(194).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (29).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m1(165).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m1(102).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image(106).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (203).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (714).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image(224).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m1(6).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (735).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (722).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (395).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (668).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (494).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (388).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m3 (28).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m3 (245).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (130).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (707).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m2 (81).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (309).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (559).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (158).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m2 (16).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m3 (175).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (257).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (100).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (805).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m (90).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m3 (160).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image(30).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (367).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image(82).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m2 (55).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (786).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image(180).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image(306).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image (15).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m1(18).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (426).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (107).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (238).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (718).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m2 (84).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (233).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (725).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m3 (19).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m2 (24).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (31).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (387).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (472).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (752).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image(190).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (603).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m3 (167).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image(77).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (96).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (517).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (475).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (328).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m3 (157).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m1(182).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (565).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (638).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m (88).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (442).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (296).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (347).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (401).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m (24).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (329).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (339).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (92).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (231).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (486).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m (8).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image (29).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m2 (115).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (629).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (20).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (394).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (177).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (166).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m2 (102).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (668).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m3 (48).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (219).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m (41).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (392).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m (139).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (694).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (798).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (522).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image(34).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (305).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (547).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (802).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m1(169).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m3 (76).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (102).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (118).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image(300).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (99).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (727).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (514).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m (140).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (106).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (169).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m2 (158).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (125).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m (65).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (597).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m3 (215).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m1(130).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (73).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (498).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m (5).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (272).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (397).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (98).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m (94).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m3 (178).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m1(17).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image(317).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (416).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (563).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m3 (183).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m2 (32).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (450).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (431).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m2 (1).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (551).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m (67).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m2 (167).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (577).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (329).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m3 (166).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (396).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m3 (8).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m (103).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m2 (30).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (344).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image(8).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m3 (43).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (734).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (451).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m3 (202).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (807).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image(121).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m1(74).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m2 (105).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m (49).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (363).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (630).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (717).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (706).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (484).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (772).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (168).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (460).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (141).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (576).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (810).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image (36).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (608).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m2 (156).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image(112).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (308).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (537).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (264).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m (145).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image(99).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (605).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image(293).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (353).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m (15).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m2 (120).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m (38).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (531).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (232).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image(265).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (337).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (806).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m3 (39).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (604).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m3 (70).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (149).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m3 (102).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m2 (7).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m (33).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (678).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (620).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m2 (21).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m3 (151).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m1(138).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (122).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image(95).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m2 (89).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image(139).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (46).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m3 (4).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image(198).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m (168).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (323).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m1(151).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m2 (78).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m1(10).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (23).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (785).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (699).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image(80).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (632).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m2 (106).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (411).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (820).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m1(21).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image(303).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (162).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (505).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image (64).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m1(42).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (704).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image (7).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m3 (235).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image(59).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (399).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (255).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (244).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (179).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (70).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (703).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (126).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image(288).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image(218).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (30).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image(107).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (104).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (612).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (402).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (32).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image(257).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image(231).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (709).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image(35).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image(321).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (88).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (354).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (644).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m3 (73).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m3 (219).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image(301).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (693).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (196).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (294).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (472).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m2 (40).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image(292).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (677).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (312).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (106).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (31).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (529).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (55).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m (12).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image(252).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m1(11).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (771).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (421).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (59).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (34).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (748).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (429).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m (157).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (659).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m1(93).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m1(191).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m1(125).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m1(146).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (708).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (221).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (533).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m1(4).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (710).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image(55).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (382).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m1(61).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (632).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (201).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (449).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m (32).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (62).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m (102).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (653).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m3 (173).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image(169).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image(325).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (2).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (319).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m3 (184).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image(130).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (672).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m (72).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (297).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m1(12).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (771).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (719).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (390).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (252).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (291).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (620).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image(135).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (320).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (57).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m (150).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (189).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (794).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (750).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m2 (109).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m (126).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (546).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (268).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m1(72).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (617).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m3 (57).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image(259).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (25).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m1(193).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m3 (96).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (551).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (735).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (143).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m (151).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image (6).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (304).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (501).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (757).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m3 (72).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m1(91).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (404).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m1(107).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (756).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (464).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (36).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\pituitary_tumor\p (733).jpg,pituitary_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (399).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\image(176).jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m (53).jpg,meningioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\glioma_tumor\gg (180).jpg,glioma_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\no_tumor\8.jpg,no_tumor
+C:\Users\Lenovo\brain-tumor\data\Training\meningioma_tumor\m3 (153).jpg,meningioma_tumor
