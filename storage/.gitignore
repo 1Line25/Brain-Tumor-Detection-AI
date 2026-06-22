@@ -1,0 +1,7 @@
+# Không commit bất kỳ dữ liệu y tế nào.
+mri/*
+gradcam/*
+
+# Giữ lại cấu trúc thư mục trong Git.
+!mri/.gitkeep
+!gradcam/.gitkeep
