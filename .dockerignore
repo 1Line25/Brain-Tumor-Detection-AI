@@ -1,0 +1,58 @@
+# ============================================================
+# Docker build context ignore
+# ============================================================
+# Mục đích:
+# - Giảm dung lượng gửi vào Docker daemon khi build.
+# - Tránh copy dữ liệu demo, notebook, cache và file nhạy cảm vào image.
+# - Không ignore best_cnn_model.h5 vì backend cần copy model này.
+
+
+# Git/cache
+.git
+.gitignore
+**/__pycache__/
+**/*.py[cod]
+**/.pytest_cache/
+**/.mypy_cache/
+**/.ruff_cache/
+
+
+# Local Python environments
+.venv/
+venv/
+env/
+ENV/
+
+
+# Environment/secrets
+.env
+.env.*
+!.env.example
+
+
+# Notebook/training artifacts không cần cho backend inference image
+*.ipynb
+.ipynb_checkpoints/
+image/
+
+
+# Storage runtime được mount bằng docker-compose, không copy vào image
+storage/
+
+
+# Model transfer learning không dùng trong backend hiện tại
+best_tl_model.h5
+
+
+# Logs/temp files
+*.log
+*.tmp
+tmp/
+temp/
+
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

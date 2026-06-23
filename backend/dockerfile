@@ -1,0 +1,62 @@
+FROM python:3.11-slim
+
+# ============================================================
+# Backend Dockerfile
+# ============================================================
+# Mục đích:
+# - Đóng gói FastAPI backend để demo/chạy ổn định.
+# - Chỉ phục vụ inference, không train model trong container.
+# - Model best_cnn_model.h5 được copy từ root project vào container.
+# ============================================================
+
+
+# Không ghi file .pyc để giảm file rác trong container.
+ENV PYTHONDONTWRITEBYTECODE=1
+
+# Log Python in ra ngay, dễ xem khi chạy docker logs.
+ENV PYTHONUNBUFFERED=1
+
+
+WORKDIR /app
+
+
+# Cài system packages tối thiểu.
+# libgl1/libglib2.0-0 hỗ trợ OpenCV xử lý ảnh trong môi trường slim.
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        libgl1 \
+        libglib2.0-0 \
+    && rm -rf /var/lib/apt/lists/*
+
+
+# Copy backend requirements trước để Docker cache bước cài dependency.
+# Nếu chỉ sửa code backend, Docker không cần cài lại toàn bộ package.
+COPY backend/requirements.txt /app/requirements.txt
+
+
+RUN pip install --no-cache-dir --upgrade pip \
+    && pip install --no-cache-dir -r /app/requirements.txt
+
+
+# Copy source backend.
+COPY backend/app /app/app
+COPY backend/database /app/database
+COPY backend/scripts /app/scripts
+
+
+# Copy model đã train từ root project.
+# Dự án không dùng folder model/, đúng theo yêu cầu của bạn.
+COPY best_cnn_model.h5 /app/best_cnn_model.h5
+
+
+# Tạo storage trong container để lưu MRI/Grad-CAM khi chạy demo.
+# Nếu dùng docker-compose, nên mount volume ra ngoài để dữ liệu không mất khi restart.
+RUN mkdir -p /app/storage/mri /app/storage/gradcam
+
+
+EXPOSE 8000
+
+
+# Chạy FastAPI bằng Uvicorn.
+# app.main:app trỏ tới biến app trong backend/app/main.py.
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]

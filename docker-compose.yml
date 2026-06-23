@@ -1,0 +1,63 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: brain_tumor_postgres
+    restart: unless-stopped
+
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin123
+      POSTGRES_DB: mydatabase
+
+    ports:
+      - "5432:5432"
+
+    volumes:
+      # Lưu dữ liệu PostgreSQL ra volume để restart container không mất DB.
+      - postgres_data:/var/lib/postgresql/data
+
+      # Mount file SQL để có thể chạy schema.sql/seed.sql trong container.
+      - ./backend/database:/database:ro
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d mydatabase"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/dockerfile
+
+    container_name: brain_tumor_backend
+    restart: unless-stopped
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+    environment:
+      ENVIRONMENT: development
+      DEBUG: "true"
+
+      # Backend trong Docker kết nối PostgreSQL qua service name "postgres".
+      DATABASE_URL: postgresql+psycopg://admin:admin123@postgres:5432/mydatabase
+
+      SECRET_KEY: development-only-change-this-secret-key
+      ACCESS_TOKEN_EXPIRE_MINUTES: 120
+
+    ports:
+      - "8000:8000"
+
+    volumes:
+      # Mount storage ra host để ảnh MRI/Grad-CAM không mất khi restart backend.
+      - ./storage:/app/storage
+
+      # Mount database SQL để có thể xem/chạy lại file trong container khi cần.
+      - ./backend/database:/app/database:ro
+
+
+volumes:
+  postgres_data:
