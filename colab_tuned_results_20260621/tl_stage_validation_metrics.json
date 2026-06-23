@@ -1,0 +1,17 @@
+{
+  "/content/drive/MyDrive/BrainTumor/checkpoints/best_tl_stage1_model.h5": {
+    "val_loss": 0.22639553248882294,
+    "val_accuracy": 0.91086186540732,
+    "val_macro_f1": 0.9112756373481301
+  },
+  "/content/drive/MyDrive/BrainTumor/checkpoints/best_tl_stage2a_model.h5": {
+    "val_loss": 0.21024473011493683,
+    "val_accuracy": 0.9191263282172373,
+    "val_macro_f1": 0.9202603505154897
+  },
+  "/content/drive/MyDrive/BrainTumor/checkpoints/best_tl_stage2b_model.h5": {
+    "val_loss": 0.2043522447347641,
+    "val_accuracy": 0.9238488783943329,
+    "val_macro_f1": 0.9248675728535924
+  }
+}
