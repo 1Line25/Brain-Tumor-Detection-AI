@@ -95,6 +95,7 @@ async def create_prediction(
         predicted_class=prediction.predicted_class,
         confidence=prediction.confidence,
         probabilities=prediction.probabilities,
+        mri_image_path=prediction.mri_image_path,
         gradcam_image_path=prediction.gradcam_image_path,
         expires_at=prediction.expires_at,
     )
@@ -102,7 +103,7 @@ async def create_prediction(
 
 @router.get(
     "",
-    response_model=PaginatedResponse[PredictionRead],
+    response_model=PaginatedResponse[PredictionDetail],
     status_code=status.HTTP_200_OK,
 )
 def list_predictions(
@@ -114,7 +115,7 @@ def list_predictions(
     doctor_id: UUID | None = Query(default=None),
     predicted_class: TumorClass | None = Query(default=None),
     prediction_status: PredictionStatus | None = Query(default=None),
-) -> PaginatedResponse[PredictionRead]:
+) -> PaginatedResponse[PredictionDetail]:
     """
     Xem lịch sử dự đoán có phân trang và bộ lọc.
     """
@@ -132,9 +133,9 @@ def list_predictions(
         filters=filters,
     )
 
-    return PaginatedResponse[PredictionRead].create(
+    return PaginatedResponse[PredictionDetail].create(
         items=[
-            PredictionRead.model_validate(prediction)
+            PredictionDetail.model_validate(prediction)
             for prediction in result.items
         ],
         total=result.total,

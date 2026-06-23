@@ -42,7 +42,7 @@ VALUES (
     '00000000-0000-0000-0000-000000000001',
     'admin',
     'admin@example.com',
-    '__REPLACE_WITH_ARGON2_HASH__',
+    '$argon2id$v=19$m=65536,t=3,p=4$/b+X0tp7zzlnzFlrbQ3BWA$I0s0Z/GyvAinOUikunu9UmHxk+v+YIYeTnTaLT/CTJE',
     'System Administrator',
     'admin',
     TRUE
@@ -78,7 +78,7 @@ VALUES (
     '00000000-0000-0000-0000-000000000002',
     'doctor01',
     'doctor01@example.com',
-    '__REPLACE_WITH_ARGON2_HASH__',
+    '$argon2id$v=19$m=65536,t=3,p=4$F+K8915r7d1bS6nVGqO09g$P67zKaEtzpQeMskL/qzaPK018yD3lsErTPd2Pe3355c',
     'Demo Doctor',
     'doctor',
     TRUE

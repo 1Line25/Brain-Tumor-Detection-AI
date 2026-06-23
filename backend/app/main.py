@@ -1,10 +1,14 @@
 from __future__ import annotations
+import sys
+from loguru import logger
 
 from contextlib import asynccontextmanager
 from typing import AsyncIterator
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+import os
 
 from app.api.router import api_router
 from app.core.config import get_settings
@@ -25,9 +29,10 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     Shutdown:
     - đóng database connection pool để Docker/container dừng sạch.
     """
-
+    logger.info("Starting up FastAPI application...")
     yield
 
+    logger.info("Shutting down FastAPI application...")
     close_database_connections()
 
 
@@ -37,6 +42,11 @@ def create_app() -> FastAPI:
 
     Tách create_app() giúp dễ test hơn và dễ mở rộng cấu hình sau này.
     """
+    
+    # Configure Loguru
+    logger.remove()
+    logger.add(sys.stdout, format="<green>{time:YYYY-MM-DD HH:mm:ss}</green> | <level>{level: <8}</level> | <cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - <level>{message}</level>")
+    logger.add("logs/app.log", rotation="10 MB", retention="7 days", level="INFO")
 
     app = FastAPI(
         title=settings.app_name,
@@ -60,6 +70,11 @@ def create_app() -> FastAPI:
         api_router,
         prefix=settings.api_v1_prefix,
     )
+
+    # Phục vụ file tĩnh (ảnh MRI, Grad-CAM)
+    if not os.path.exists("storage"):
+        os.makedirs("storage")
+    app.mount("/storage", StaticFiles(directory="storage"), name="storage")
 
     @app.get("/health", tags=["Health"])
     def health_check() -> dict[str, object]:

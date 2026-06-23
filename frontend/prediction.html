@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dự đoán MRI - Brain Tumor Detection AI</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>Brain Tumor AI</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item">Tổng quan</a>
+                <a href="patients.html" class="nav-item">Quản lý Bệnh nhân</a>
+                <a href="prediction.html" class="nav-item active">Dự đoán MRI</a>
+                <a href="history.html" class="nav-item">Lịch sử Dự đoán</a>
+                <a href="users.html" class="nav-item admin-only hidden">Quản lý Tài khoản</a>
+                <a href="audit-logs.html" class="nav-item admin-only hidden">Nhật ký Hệ thống (Audit Logs)</a>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <div id="user-fullname" style="font-weight: 500; color: var(--text-primary);">Đang tải...</div>
+                    <div id="user-role" class="user-role">Đang tải...</div>
+                </div>
+                <button id="logout-btn" class="btn btn-outline" style="width: 100%; font-size: 0.75rem;">Đăng xuất</button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="topbar">
+                <h3>Chẩn đoán Ảnh MRI</h3>
+            </header>
+            
+            <div class="content-wrapper">
+                <div class="page-header">
+                    <h2>Tải lên Ảnh MRI</h2>
+                </div>
+                
+                <div class="card" style="max-width: 800px;">
+                    <div class="card-body">
+                        <form id="prediction-form">
+                            <div class="form-group">
+                                <label class="form-label" for="patient-select">Chọn Bệnh nhân</label>
+                                <select id="patient-select" class="form-control" required style="background-color: var(--bg-color);">
+                                    <option value="">-- Đang tải danh sách bệnh nhân --</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group mt-2">
+                                <label class="form-label" for="mri-image">Ảnh MRI (.jpg, .png) - Tối đa 10MB</label>
+                                <input type="file" id="mri-image" class="form-control" accept=".jpg,.jpeg,.png" required>
+                            </div>
+                            
+                            <div id="preview-container" class="hidden text-center mt-2">
+                                <img id="preview-image" class="img-preview" alt="MRI Preview">
+                            </div>
+
+                            <div id="form-error" class="text-error hidden mt-2"></div>
+
+                            <button type="submit" id="btn-predict" class="btn btn-primary mt-2" style="width: 100%;">Thực hiện Chẩn đoán</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Result Section -->
+                <div id="result-container" class="card hidden" style="max-width: 800px;">
+                    <div class="card-header">
+                        Kết quả Chẩn đoán
+                    </div>
+                    <div class="card-body">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-color);">
+                            <div>
+                                <p style="color: var(--text-secondary); font-size: 0.875rem;">Loại U dự đoán</p>
+                                <h3 id="res-class" style="font-size: 1.5rem; margin-top: 0.25rem;">-</h3>
+                            </div>
+                            <div class="text-right">
+                                <p style="color: var(--text-secondary); font-size: 0.875rem;">Độ tin cậy</p>
+                                <h3 id="res-confidence" style="font-size: 1.5rem; margin-top: 0.25rem; color: var(--success-color);">-</h3>
+                            </div>
+                        </div>
+
+                        <div class="gradcam-container">
+                            <div>
+                                <h4 style="margin-bottom: 1rem;">Ảnh MRI gốc</h4>
+                                <img id="res-original-img" class="img-preview" style="width: 100%; border: none; background: #000;" alt="Original MRI">
+                            </div>
+                            <div>
+                                <h4 style="margin-bottom: 1rem;">Bản đồ vùng chú ý (Grad-CAM)</h4>
+                                <img id="res-gradcam-img" class="img-preview" style="width: 100%; border: none; background: #000;" alt="Grad-CAM MRI">
+                                <p style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.5rem; text-align: center;">Vùng màu đỏ/vàng thể hiện khu vực model tập trung phân tích.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/predictions.js"></script>
+</body>
+</html>

@@ -10,8 +10,12 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 # config.py nằm tại: backend/app/core/config.py
-# parents[3] tương ứng với thư mục gốc của dự án.
-PROJECT_ROOT = Path(__file__).resolve().parents[3]
+# parents[3] tương ứng với thư mục gốc của dự án trên host.
+# Nhưng trong Docker, root là /app, tương ứng với parents[2].
+if Path("/app/app/core/config.py").exists():
+    PROJECT_ROOT = Path("/app")
+else:
+    PROJECT_ROOT = Path(__file__).resolve().parents[3]
 
 
 class Settings(BaseSettings):
@@ -92,6 +96,8 @@ class Settings(BaseSettings):
     cors_origins: tuple[str, ...] = (
         "http://localhost:8080",
         "http://127.0.0.1:8080",
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
     )
 
     @property

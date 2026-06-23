@@ -110,7 +110,10 @@ class ModelService:
         image = Image.open(image_path).convert("RGB")
         image = image.resize(self.image_size)
 
-        image_array = np.asarray(image, dtype=np.float32) / 255.0
+        # Do model đã có layer Rescaling(1./255), backend không cần chia 255.0 nữa.
+        # Nếu chia 2 lần sẽ làm giá trị pixel quá nhỏ, khiến AI "bị mù" và luôn
+        # dự đoán "Không có u" với độ tự tin 100%.
+        image_array = np.asarray(image, dtype=np.float32)
 
         return np.expand_dims(image_array, axis=0)
 

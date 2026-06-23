@@ -47,17 +47,40 @@ class GradCAMService:
         preprocessed_image = self._preprocess_image(image_path)
         target_layer = self._get_target_conv_layer(model, tf)
 
-        grad_model = tf.keras.models.Model(
-            inputs=model.inputs,
-            outputs=[
-                target_layer.output,
-                model.output,
-            ],
-        )
+        # Tạo classifier động để giải quyết lỗi mất kết nối gradient trong Keras 3
+        # khi dùng model Sequential.
+        target_layer_idx = None
+        for i, layer in enumerate(model.layers):
+            if layer.name == target_layer.name:
+                target_layer_idx = i
+                break
 
-        with tf.GradientTape() as tape:
-            conv_outputs, predictions = grad_model(preprocessed_image)
-            class_score = predictions[:, class_index]
+        if target_layer_idx is not None:
+            last_conv_layer_model = tf.keras.models.Model(model.inputs, target_layer.output)
+            classifier_input = tf.keras.Input(shape=target_layer.output.shape[1:])
+            x = classifier_input
+            for layer in model.layers[target_layer_idx + 1:]:
+                x = layer(x)
+            classifier_model = tf.keras.models.Model(classifier_input, x)
+
+            with tf.GradientTape() as tape:
+                conv_outputs = last_conv_layer_model(preprocessed_image)
+                tape.watch(conv_outputs)
+                predictions = classifier_model(conv_outputs)
+                class_score = predictions[:, class_index]
+        else:
+            # Fallback cho transfer learning / nested models
+            grad_model = tf.keras.models.Model(
+                inputs=model.inputs,
+                outputs=[
+                    target_layer.output,
+                    model.outputs[0] if isinstance(model.outputs, list) else model.output,
+                ],
+            )
+
+            with tf.GradientTape() as tape:
+                conv_outputs, predictions = grad_model(preprocessed_image)
+                class_score = predictions[:, class_index]
 
         grads = tape.gradient(class_score, conv_outputs)
 
@@ -135,7 +158,7 @@ class GradCAMService:
         image = Image.open(image_path).convert("RGB")
         image = image.resize(self.image_size)
 
-        image_array = np.asarray(image, dtype=np.float32) / 255.0
+        image_array = np.asarray(image, dtype=np.float32)
 
         return np.expand_dims(image_array, axis=0)
 

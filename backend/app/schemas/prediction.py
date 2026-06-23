@@ -115,6 +115,11 @@ class PredictionResult(BaseModel):
         description="Xác suất của toàn bộ lớp phân loại",
     )
 
+    mri_image_path: str = Field(
+        ...,
+        description="Đường dẫn ảnh MRI gốc",
+    )
+
     gradcam_image_path: str | None = Field(
         default=None,
         description="Đường dẫn ảnh Grad-CAM nếu tạo thành công",
