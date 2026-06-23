@@ -1,0 +1,26 @@
+{
+  "classes_order": [
+    "glioma_tumor",
+    "meningioma_tumor",
+    "no_tumor",
+    "pituitary_tumor"
+  ],
+  "class_to_index": {
+    "glioma_tumor": 0,
+    "meningioma_tumor": 1,
+    "no_tumor": 2,
+    "pituitary_tumor": 3
+  },
+  "index_to_class": {
+    "0": "glioma_tumor",
+    "1": "meningioma_tumor",
+    "2": "no_tumor",
+    "3": "pituitary_tumor"
+  },
+  "index_to_display_label": {
+    "0": "Glioma",
+    "1": "Meningioma",
+    "2": "Khong co u",
+    "3": "Pituitary"
+  }
+}

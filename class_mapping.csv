@@ -1,0 +1,5 @@
+class_index,class_key,display_label
+0,glioma_tumor,Glioma
+1,meningioma_tumor,Meningioma
+2,no_tumor,Khong co u
+3,pituitary_tumor,Pituitary
