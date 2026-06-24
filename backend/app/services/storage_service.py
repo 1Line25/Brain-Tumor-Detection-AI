@@ -27,7 +27,7 @@ class StorageService:
         self.settings.mri_storage_dir.mkdir(parents=True, exist_ok=True)
         self.settings.gradcam_storage_dir.mkdir(parents=True, exist_ok=True)
 
-    async def save_upload_file(
+    def save_upload_file(
         self,
         *,
         upload_file: UploadFile,

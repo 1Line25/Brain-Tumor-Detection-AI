@@ -98,6 +98,70 @@ Create and activate a Python environment, then install dependencies:
 pip install -r requirement.txt
 ```
 
+## Run the complete system with Docker
+
+Docker Compose starts the complete runtime system:
+
+- PostgreSQL
+- automatic database schema and demo data initialization
+- FastAPI backend
+- trained EfficientNetB0 model inference and Grad-CAM
+- Nginx frontend
+
+Training notebooks and AI training jobs are not started by Docker Compose.
+
+Create a local environment file if you want to change the default configuration:
+
+```bash
+cp .env.example .env
+```
+
+Build and start the system:
+
+```bash
+docker compose up --build
+```
+
+Open:
+
+```text
+Frontend:     http://localhost:8080
+Backend API:  http://localhost:8000/docs
+Health check: http://localhost:8000/health
+```
+
+Follow all container logs:
+
+```bash
+docker compose logs -f
+```
+
+Follow one component:
+
+```bash
+docker compose logs -f frontend
+docker compose logs -f backend
+docker compose logs -f postgres
+docker compose logs -f database-init
+```
+
+Application and request log messages are written in Vietnamese where practical.
+Technical terms such as API, request, database, model, inference, and Grad-CAM
+are kept unchanged for easier troubleshooting.
+
+Stop the system:
+
+```bash
+docker compose down
+```
+
+Remove PostgreSQL data and initialize a completely new database:
+
+```bash
+docker compose down -v
+docker compose up --build
+```
+
 
 ## How To Run
 

@@ -2,15 +2,17 @@ from __future__ import annotations
 
 from datetime import datetime, timezone
 from pathlib import Path
+from threading import Lock
 from uuid import UUID
 
 from fastapi import UploadFile
+from loguru import logger
 from sqlalchemy import func, select
-from sqlalchemy.orm import Session, selectinload
+from sqlalchemy.orm import Session, joinedload
 
 from app.models.patient import Patient
 from app.models.prediction import Prediction, PredictionStatus
-from app.models.user import User
+from app.models.user import User, UserRole
 from app.schemas.common import PaginatedResponse, PaginationParams
 from app.schemas.prediction import PredictionFilter
 from app.services.gradcam_service import GradCAMService
@@ -24,7 +26,7 @@ class PredictionService:
 
     Nhiệm vụ chính:
     - Lưu ảnh MRI upload vào storage.
-    - Gọi model best_cnn_model.h5 để phân loại.
+    - Gọi model EfficientNetB0 best_tl_model.h5 để phân loại.
     - Tạo ảnh Grad-CAM giải thích vùng model tập trung.
     - Ghi lịch sử dự đoán vào database.
 
@@ -33,6 +35,8 @@ class PredictionService:
     - Database chỉ lưu đường dẫn ảnh, không lưu binary ảnh.
     - Nếu inference lỗi, vẫn ghi record failed để dễ debug/demo.
     """
+
+    _inference_lock = Lock()
 
     def __init__(self, db: Session) -> None:
         """
@@ -44,7 +48,7 @@ class PredictionService:
         self.model_service = ModelService()
         self.gradcam_service = GradCAMService()
 
-    async def create_prediction(
+    def create_prediction(
         self,
         *,
         patient: Patient,
@@ -66,7 +70,15 @@ class PredictionService:
         - giữ đường dẫn ảnh MRI để debug trong 24 giờ.
         """
 
-        mri_relative_path = await self.storage_service.save_upload_file(
+        if (
+            doctor.role == UserRole.doctor
+            and patient.created_by != doctor.id
+        ):
+            raise PermissionError(
+                "Doctor cannot create a prediction for another doctor's patient"
+            )
+
+        mri_relative_path = self.storage_service.save_upload_file(
             upload_file=upload_file,
             folder="mri",
         )
@@ -75,11 +87,14 @@ class PredictionService:
         mri_absolute_path = self.storage_service.to_absolute_path(mri_relative_path)
 
         try:
-            model_prediction = self.model_service.predict(mri_absolute_path)
-            gradcam_relative_path = self._generate_and_save_gradcam(
-                image_path=mri_absolute_path,
-                model_prediction=model_prediction,
-            )
+            # Model được dùng chung giữa các request. Chạy tuần tự vùng
+            # inference + Grad-CAM để tránh tăng RAM và race condition.
+            with self.__class__._inference_lock:
+                model_prediction = self.model_service.predict(mri_absolute_path)
+                gradcam_relative_path = self._generate_and_save_gradcam(
+                    image_path=mri_absolute_path,
+                    model_prediction=model_prediction,
+                )
 
             prediction = Prediction(
                 patient_id=patient.id,
@@ -98,6 +113,11 @@ class PredictionService:
             )
 
         except Exception as exc:
+            logger.exception(
+                "Dự đoán thất bại | patient_id={} doctor_id={}",
+                patient.id,
+                doctor.id,
+            )
             # Không để lỗi inference làm mất hoàn toàn lịch sử thao tác.
             # Record failed giúp admin/dev biết request nào đã lỗi và lỗi gì.
             prediction = Prediction(
@@ -126,38 +146,52 @@ class PredictionService:
 
         return prediction
 
-    def get_by_id(self, prediction_id: UUID) -> Prediction | None:
+    def get_by_id(
+        self,
+        prediction_id: UUID,
+        *,
+        current_user: User,
+    ) -> Prediction | None:
         """
-        Lấy prediction theo ID.
+        Lấy prediction theo ID trong phạm vi được phép.
 
-        Dùng cho API xem chi tiết lịch sử dự đoán.
+        Admin được xem mọi prediction. Bác sĩ chỉ được xem prediction do
+        chính mình thực hiện.
         """
 
         statement = select(Prediction).where(Prediction.id == prediction_id)
+        statement = self._scope_to_current_user(statement, current_user)
         return self.db.scalar(statement)
 
-    def get_detail_by_id(self, prediction_id: UUID) -> Prediction | None:
+    def get_detail_by_id(
+        self,
+        prediction_id: UUID,
+        *,
+        current_user: User,
+    ) -> Prediction | None:
         """
         Lấy prediction kèm thông tin bệnh nhân và bác sĩ.
 
         Vì relationship trong model dùng lazy='raise',
-        cần chủ động selectinload để tránh lỗi khi serialize response.
+        cần chủ động joinedload để lấy dữ liệu trong cùng một query.
         """
 
         statement = (
             select(Prediction)
             .options(
-                selectinload(Prediction.patient),
-                selectinload(Prediction.doctor),
+                joinedload(Prediction.patient),
+                joinedload(Prediction.doctor),
             )
             .where(Prediction.id == prediction_id)
         )
+        statement = self._scope_to_current_user(statement, current_user)
 
         return self.db.scalar(statement)
 
     def list_predictions(
         self,
         *,
+        current_user: User,
         pagination: PaginationParams,
         filters: PredictionFilter | None = None,
     ) -> PaginatedResponse[Prediction]:
@@ -174,13 +208,16 @@ class PredictionService:
 
         conditions = self._build_filter_conditions(filters)
 
+        if current_user.role == UserRole.doctor:
+            conditions.append(Prediction.doctor_id == current_user.id)
+
         total_statement = select(func.count()).select_from(Prediction)
 
         list_statement = (
             select(Prediction)
             .options(
-                selectinload(Prediction.patient),
-                selectinload(Prediction.doctor),
+                joinedload(Prediction.patient),
+                joinedload(Prediction.doctor),
             )
             .order_by(Prediction.created_at.desc())
             .offset(pagination.offset)
@@ -200,6 +237,21 @@ class PredictionService:
             page=pagination.page,
             page_size=pagination.page_size,
         )
+
+    def _scope_to_current_user(self, statement, current_user: User):
+        """
+        Thêm điều kiện sở hữu vào query prediction.
+
+        Bác sĩ chỉ thấy các lần dự đoán mình thực hiện. Admin không bị thêm
+        điều kiện và có thể giám sát toàn hệ thống.
+        """
+
+        if current_user.role == UserRole.doctor:
+            statement = statement.where(
+                Prediction.doctor_id == current_user.id
+            )
+
+        return statement
 
     def delete_expired_files(self) -> int:
         """
@@ -269,12 +321,12 @@ class PredictionService:
         """
 
         label = model_prediction.predicted_class.value
-        labels = list(self.model_service.labels)
-
-        if label not in labels:
-            raise ValueError(f"Predicted label '{label}' not found in model labels")
-
-        return labels.index(label)
+        try:
+            return self.model_service.labels.index(label)
+        except ValueError as exc:
+            raise ValueError(
+                f"Predicted label '{label}' not found in model labels"
+            ) from exc
 
     def _build_filter_conditions(
         self,

@@ -2,9 +2,19 @@ from __future__ import annotations
 
 from uuid import UUID
 
-from fastapi import APIRouter, File, Form, HTTPException, Query, UploadFile, status
+from fastapi import (
+    APIRouter,
+    File,
+    Form,
+    HTTPException,
+    Query,
+    Request,
+    UploadFile,
+    status,
+)
 
 from app.api.deps import AdminUser, DbSession, DoctorOrAdminUser
+from app.models.audit_log import AuditAction
 from app.models.prediction import PredictionStatus, TumorClass
 from app.schemas.common import MessageResponse, PaginatedResponse, PaginationParams
 from app.schemas.prediction import (
@@ -15,6 +25,7 @@ from app.schemas.prediction import (
 )
 from app.services.patient_service import PatientService
 from app.services.prediction_service import PredictionService
+from app.services.audit_service import AuditService
 
 
 router = APIRouter(
@@ -28,7 +39,8 @@ router = APIRouter(
     response_model=PredictionResult | PredictionRead,
     status_code=status.HTTP_201_CREATED,
 )
-async def create_prediction(
+def create_prediction(
+    request: Request,
     db: DbSession,
     current_user: DoctorOrAdminUser,
     patient_id: UUID = Form(...),
@@ -40,12 +52,15 @@ async def create_prediction(
     Backend sẽ:
     - kiểm tra bệnh nhân tồn tại,
     - lưu ảnh MRI vào storage,
-    - chạy model best_cnn_model.h5,
+    - chạy model EfficientNetB0 best_tl_model.h5,
     - tạo Grad-CAM,
     - lưu lịch sử dự đoán vào database.
     """
 
-    patient = PatientService(db).get_by_id(patient_id)
+    patient = PatientService(db).get_by_id(
+        patient_id,
+        current_user=current_user,
+    )
 
     if patient is None:
         raise HTTPException(
@@ -53,17 +68,47 @@ async def create_prediction(
             detail="Patient not found",
         )
 
+    # Kết thúc read transaction trước khi chạy TensorFlow/Grad-CAM để không giữ
+    # database connection trong suốt tác vụ CPU nặng.
+    db.commit()
+
     try:
-        prediction = await PredictionService(db).create_prediction(
+        prediction = PredictionService(db).create_prediction(
             patient=patient,
             doctor=current_user,
             upload_file=mri_image,
+        )
+        AuditService(db).log_request(
+            request=request,
+            action=AuditAction.create_prediction,
+            actor=current_user,
+            entity_type="prediction",
+            entity_id=prediction.id,
+            metadata={
+                "patient_id": str(prediction.patient_id),
+                "status": prediction.status.value,
+                "predicted_class": (
+                    prediction.predicted_class.value
+                    if prediction.predicted_class
+                    else None
+                ),
+                "confidence": prediction.confidence,
+            },
         )
         db.commit()
         db.refresh(prediction)
     except ValueError as exc:
         # Lỗi người dùng: file sai định dạng, quá dung lượng, path không hợp lệ...
         db.rollback()
+        AuditService(db).log_request(
+            request=request,
+            action=AuditAction.create_prediction_failed,
+            actor=current_user,
+            entity_type="patient",
+            entity_id=patient.id,
+            metadata={"failure_type": "invalid_upload"},
+        )
+        db.commit()
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=str(exc),
@@ -71,6 +116,15 @@ async def create_prediction(
     except Exception as exc:
         # Lỗi hệ thống không trả chi tiết kỹ thuật ra frontend.
         db.rollback()
+        AuditService(db).log_request(
+            request=request,
+            action=AuditAction.create_prediction_failed,
+            actor=current_user,
+            entity_type="patient",
+            entity_id=patient.id,
+            metadata={"failure_type": "system_error"},
+        )
+        db.commit()
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Prediction request failed",
@@ -95,6 +149,7 @@ async def create_prediction(
         predicted_class=prediction.predicted_class,
         confidence=prediction.confidence,
         probabilities=prediction.probabilities,
+        mri_image_path=prediction.mri_image_path,
         gradcam_image_path=prediction.gradcam_image_path,
         expires_at=prediction.expires_at,
     )
@@ -102,19 +157,19 @@ async def create_prediction(
 
 @router.get(
     "",
-    response_model=PaginatedResponse[PredictionRead],
+    response_model=PaginatedResponse[PredictionDetail],
     status_code=status.HTTP_200_OK,
 )
 def list_predictions(
     db: DbSession,
-    _: DoctorOrAdminUser,
+    current_user: DoctorOrAdminUser,
     page: int = Query(default=1, ge=1),
     page_size: int = Query(default=20, ge=1, le=100),
     patient_id: UUID | None = Query(default=None),
     doctor_id: UUID | None = Query(default=None),
     predicted_class: TumorClass | None = Query(default=None),
     prediction_status: PredictionStatus | None = Query(default=None),
-) -> PaginatedResponse[PredictionRead]:
+) -> PaginatedResponse[PredictionDetail]:
     """
     Xem lịch sử dự đoán có phân trang và bộ lọc.
     """
@@ -128,13 +183,14 @@ def list_predictions(
     )
 
     result = PredictionService(db).list_predictions(
+        current_user=current_user,
         pagination=pagination,
         filters=filters,
     )
 
-    return PaginatedResponse[PredictionRead].create(
+    return PaginatedResponse[PredictionDetail].create(
         items=[
-            PredictionRead.model_validate(prediction)
+            PredictionDetail.model_validate(prediction)
             for prediction in result.items
         ],
         total=result.total,
@@ -149,8 +205,9 @@ def list_predictions(
     status_code=status.HTTP_200_OK,
 )
 def cleanup_expired_files(
+    request: Request,
     db: DbSession,
-    _: AdminUser,
+    current_admin: AdminUser,
 ) -> MessageResponse:
     """
     Admin xóa MRI/Grad-CAM đã hết hạn khỏi storage.
@@ -159,6 +216,13 @@ def cleanup_expired_files(
     """
 
     deleted_count = PredictionService(db).delete_expired_files()
+    AuditService(db).log_request(
+        request=request,
+        action=AuditAction.delete_expired_files,
+        actor=current_admin,
+        entity_type="prediction_files",
+        metadata={"deleted_count": deleted_count},
+    )
     db.commit()
 
     return MessageResponse(
@@ -173,19 +237,33 @@ def cleanup_expired_files(
 )
 def get_prediction(
     prediction_id: UUID,
+    request: Request,
     db: DbSession,
-    _: DoctorOrAdminUser,
+    current_user: DoctorOrAdminUser,
 ) -> PredictionDetail:
     """
     Xem chi tiết một lần dự đoán.
     """
 
-    prediction = PredictionService(db).get_detail_by_id(prediction_id)
+    prediction = PredictionService(db).get_detail_by_id(
+        prediction_id,
+        current_user=current_user,
+    )
 
     if prediction is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Prediction not found",
         )
+
+    AuditService(db).log_request(
+        request=request,
+        action=AuditAction.view_prediction,
+        actor=current_user,
+        entity_type="prediction",
+        entity_id=prediction.id,
+        metadata={"patient_id": str(prediction.patient_id)},
+    )
+    db.commit()
 
     return PredictionDetail.model_validate(prediction)

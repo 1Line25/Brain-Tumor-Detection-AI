@@ -6,6 +6,7 @@ from uuid import UUID
 from pydantic import BaseModel, Field
 
 from app.models.audit_log import AuditAction
+from app.schemas.user import UserSummary
 
 
 class AuditLogRead(BaseModel):
@@ -17,6 +18,7 @@ class AuditLogRead(BaseModel):
 
     id: UUID
     actor_id: UUID | None
+    actor: UserSummary | None
     action: AuditAction
     entity_type: str | None
     entity_id: str | None

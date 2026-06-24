@@ -31,3 +31,6 @@ h5py>=3.11.0
 numpy>=2.0.0
 opencv-python-headless>=4.10.0
 Pillow>=10.0.0
+
+# Logging
+loguru>=0.7.0

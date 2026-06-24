@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Generic, TypeVar
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 T = TypeVar("T")
@@ -82,6 +82,8 @@ class PaginatedResponse(BaseModel, Generic[T]):
     - PaginatedResponse[PatientRead]
     - PaginatedResponse[PredictionRead]
     """
+
+    model_config = ConfigDict(from_attributes=True, arbitrary_types_allowed=True)
 
     items: list[T] = Field(
         default_factory=list,

@@ -2,9 +2,10 @@ from __future__ import annotations
 
 from uuid import UUID
 
-from fastapi import APIRouter, HTTPException, Query, status
+from fastapi import APIRouter, HTTPException, Query, Request, status
 
 from app.api.deps import AdminUser, DbSession
+from app.models.audit_log import AuditAction
 from app.schemas.common import MessageResponse, PaginatedResponse, PaginationParams
 from app.schemas.user import (
     PasswordResetByAdmin,
@@ -13,6 +14,7 @@ from app.schemas.user import (
     UserUpdate,
 )
 from app.services.user_service import UserService
+from app.services.audit_service import AuditService
 
 
 router = APIRouter(
@@ -28,8 +30,9 @@ router = APIRouter(
 )
 def create_user(
     data: UserCreate,
+    request: Request,
     db: DbSession,
-    _: AdminUser,
+    current_admin: AdminUser,
 ) -> UserRead:
     """
     Admin tạo tài khoản mới cho bác sĩ hoặc admin khác.
@@ -39,6 +42,17 @@ def create_user(
 
     try:
         user = UserService(db).create(data)
+        AuditService(db).log_request(
+            request=request,
+            action=AuditAction.create_user,
+            actor=current_admin,
+            entity_type="user",
+            entity_id=user.id,
+            metadata={
+                "username": user.username,
+                "role": user.role.value,
+            },
+        )
         db.commit()
         db.refresh(user)
         return UserRead.model_validate(user)
@@ -118,8 +132,9 @@ def get_user(
 def update_user(
     user_id: UUID,
     data: UserUpdate,
+    request: Request,
     db: DbSession,
-    _: AdminUser,
+    current_admin: AdminUser,
 ) -> UserRead:
     """
     Admin cập nhật thông tin user.
@@ -142,6 +157,18 @@ def update_user(
 
     try:
         updated_user = service.update(user, data)
+        AuditService(db).log_request(
+            request=request,
+            action=AuditAction.update_user,
+            actor=current_admin,
+            entity_type="user",
+            entity_id=updated_user.id,
+            metadata={
+                "updated_fields": sorted(
+                    data.model_dump(exclude_unset=True).keys()
+                ),
+            },
+        )
         db.commit()
         db.refresh(updated_user)
         return UserRead.model_validate(updated_user)
@@ -161,8 +188,9 @@ def update_user(
 def reset_password(
     user_id: UUID,
     data: PasswordResetByAdmin,
+    request: Request,
     db: DbSession,
-    _: AdminUser,
+    current_admin: AdminUser,
 ) -> MessageResponse:
     """
     Admin đặt lại mật khẩu cho user.
@@ -183,6 +211,14 @@ def reset_password(
         user=user,
         new_password=data.new_password,
     )
+    AuditService(db).log_request(
+        request=request,
+        action=AuditAction.reset_password,
+        actor=current_admin,
+        entity_type="user",
+        entity_id=user.id,
+        metadata={"username": user.username},
+    )
     db.commit()
 
     return MessageResponse(message="Password has been reset successfully")
@@ -195,8 +231,9 @@ def reset_password(
 )
 def activate_user(
     user_id: UUID,
+    request: Request,
     db: DbSession,
-    _: AdminUser,
+    current_admin: AdminUser,
 ) -> UserRead:
     """
     Admin mở khóa tài khoản user.
@@ -212,6 +249,14 @@ def activate_user(
         )
 
     activated_user = service.activate(user)
+    AuditService(db).log_request(
+        request=request,
+        action=AuditAction.activate_user,
+        actor=current_admin,
+        entity_type="user",
+        entity_id=activated_user.id,
+        metadata={"username": activated_user.username},
+    )
     db.commit()
     db.refresh(activated_user)
 
@@ -225,8 +270,9 @@ def activate_user(
 )
 def deactivate_user(
     user_id: UUID,
+    request: Request,
     db: DbSession,
-    _: AdminUser,
+    current_admin: AdminUser,
 ) -> UserRead:
     """
     Admin khóa tài khoản user.
@@ -244,6 +290,14 @@ def deactivate_user(
         )
 
     deactivated_user = service.deactivate(user)
+    AuditService(db).log_request(
+        request=request,
+        action=AuditAction.deactivate_user,
+        actor=current_admin,
+        entity_type="user",
+        entity_id=deactivated_user.id,
+        metadata={"username": deactivated_user.username},
+    )
     db.commit()
     db.refresh(deactivated_user)
 
