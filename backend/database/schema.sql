@@ -66,17 +66,33 @@ BEGIN
     IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'audit_action') THEN
         CREATE TYPE audit_action AS ENUM (
             'login',
+            'login_failed',
+            'login_rate_limited',
             'logout',
             'create_user',
             'update_user',
+            'reset_password',
+            'activate_user',
             'deactivate_user',
             'create_patient',
+            'view_patient',
             'update_patient',
             'create_prediction',
+            'create_prediction_failed',
+            'view_prediction',
             'delete_expired_files'
         );
     END IF;
 END $$;
+
+-- Bổ sung action mới cho database đã tồn tại từ phiên bản trước.
+ALTER TYPE audit_action ADD VALUE IF NOT EXISTS 'login_failed';
+ALTER TYPE audit_action ADD VALUE IF NOT EXISTS 'login_rate_limited';
+ALTER TYPE audit_action ADD VALUE IF NOT EXISTS 'reset_password';
+ALTER TYPE audit_action ADD VALUE IF NOT EXISTS 'activate_user';
+ALTER TYPE audit_action ADD VALUE IF NOT EXISTS 'create_prediction_failed';
+ALTER TYPE audit_action ADD VALUE IF NOT EXISTS 'view_patient';
+ALTER TYPE audit_action ADD VALUE IF NOT EXISTS 'view_prediction';
 
 
 -- ============================================================
@@ -135,7 +151,42 @@ EXECUTE FUNCTION set_updated_at();
 
 
 -- ============================================================
--- 4. PATIENTS TABLE
+-- 4. LOGIN THROTTLES TABLE
+-- ============================================================
+-- Lưu bộ đếm đăng nhập sai theo tài khoản/IP để giới hạn vẫn còn hiệu lực
+-- khi backend restart hoặc chạy nhiều instance.
+
+CREATE TABLE IF NOT EXISTS login_throttles (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    scope_type VARCHAR(20) NOT NULL,
+    scope_key VARCHAR(64) NOT NULL,
+    failed_attempts INTEGER NOT NULL DEFAULT 0,
+    window_started_at TIMESTAMPTZ NOT NULL,
+    last_failed_at TIMESTAMPTZ NULL,
+    blocked_until TIMESTAMPTZ NULL,
+
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    CONSTRAINT uq_login_throttles_scope
+        UNIQUE (scope_type, scope_key)
+);
+
+
+CREATE INDEX IF NOT EXISTS ix_login_throttles_blocked_until
+ON login_throttles (blocked_until);
+
+
+DROP TRIGGER IF EXISTS trg_login_throttles_set_updated_at ON login_throttles;
+CREATE TRIGGER trg_login_throttles_set_updated_at
+BEFORE UPDATE ON login_throttles
+FOR EACH ROW
+EXECUTE FUNCTION set_updated_at();
+
+
+-- ============================================================
+-- 5. PATIENTS TABLE
 -- ============================================================
 -- Lưu hồ sơ bệnh nhân.
 -- Tách riêng khỏi predictions để tránh lặp thông tin bệnh nhân nhiều lần.
@@ -188,7 +239,7 @@ EXECUTE FUNCTION set_updated_at();
 
 
 -- ============================================================
--- 5. PREDICTIONS TABLE
+-- 6. PREDICTIONS TABLE
 -- ============================================================
 -- Lưu lịch sử upload MRI và kết quả model.
 -- DB chỉ lưu đường dẫn file, không lưu ảnh binary để nhẹ database.
@@ -276,7 +327,7 @@ EXECUTE FUNCTION set_updated_at();
 
 
 -- ============================================================
--- 6. AUDIT_LOGS TABLE
+-- 7. AUDIT_LOGS TABLE
 -- ============================================================
 -- Lưu nhật ký thao tác hệ thống.
 -- actor_id có thể NULL nếu hành động do hệ thống tự chạy, ví dụ cleanup file.

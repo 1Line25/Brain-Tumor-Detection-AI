@@ -16,6 +16,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if (token && currentPage !== 'index.html' && currentPage !== '') {
         const fullname = localStorage.getItem('user_fullname') || 'User';
         const role = localStorage.getItem('user_role') || 'doctor';
+        const adminPages = new Set(['users.html', 'audit-logs.html']);
+
+        if (role !== 'admin' && adminPages.has(currentPage)) {
+            window.location.replace('dashboard.html');
+            return;
+        }
         
         const userInfoEl = document.getElementById('user-fullname');
         const userRoleEl = document.getElementById('user-role');
@@ -29,18 +35,28 @@ document.addEventListener('DOMContentLoaded', () => {
         // Hide admin links for doctors
         if (role !== 'admin') {
             document.querySelectorAll('.admin-only').forEach(el => el.classList.add('hidden'));
+        } else {
+            document.querySelectorAll('.admin-only').forEach(
+                el => el.classList.remove('hidden')
+            );
         }
     }
 
     // Handle logout
     const logoutBtn = document.getElementById('logout-btn');
     if (logoutBtn) {
-        logoutBtn.addEventListener('click', (e) => {
+        logoutBtn.addEventListener('click', async (e) => {
             e.preventDefault();
-            localStorage.removeItem('access_token');
-            localStorage.removeItem('user_role');
-            localStorage.removeItem('user_fullname');
-            window.location.href = 'index.html';
+            try {
+                await apiFetch('/auth/logout', { method: 'POST' });
+            } catch (error) {
+                // Token có thể đã hết hạn; vẫn phải xóa phiên cục bộ.
+            } finally {
+                localStorage.removeItem('access_token');
+                localStorage.removeItem('user_role');
+                localStorage.removeItem('user_fullname');
+                window.location.href = 'index.html';
+            }
         });
     }
 

@@ -37,6 +37,8 @@ class Settings(BaseSettings):
 
     environment: Literal["development", "test", "production"] = "development"
     debug: bool = False
+    log_level: Literal["TRACE", "DEBUG", "INFO", "WARNING", "ERROR"] = "INFO"
+    log_to_file: bool = False
 
     # Prefix API thống nhất, ví dụ: /api/v1/auth/login.
     api_v1_prefix: str = "/api/v1"
@@ -48,8 +50,8 @@ class Settings(BaseSettings):
     database_pool_size: int = Field(default=5, ge=1, le=50)
     database_max_overflow: int = Field(default=10, ge=0, le=100)
 
-    # Backend dùng trực tiếp model đã train ở thư mục gốc, không dùng folder model/.
-    model_path: Path = PROJECT_ROOT / "best_cnn_model.h5"
+    # Backend dùng model EfficientNetB0 tốt nhất đã train ở thư mục gốc.
+    model_path: Path = PROJECT_ROOT / "best_tl_model.h5"
 
     # Notebook train của dự án dùng IMG_SIZE = (240, 240).
     model_input_size: tuple[int, int] = (240, 240)
@@ -63,8 +65,9 @@ class Settings(BaseSettings):
         "pituitary_tumor",
     )
 
-    # Conv2D cuối cùng đã kiểm tra trực tiếp trong best_cnn_model.h5.
-    gradcam_last_conv_layer_name: str = "conv2d_13"
+    # Conv2D cuối của EfficientNetB0. GradCAMService vẫn tự tìm fallback nếu
+    # kiến trúc model hoặc tên layer thay đổi.
+    gradcam_last_conv_layer_name: str = "top_conv"
 
     # Storage lưu ảnh MRI và Grad-CAM.
     storage_root: Path = PROJECT_ROOT / "storage"
@@ -91,6 +94,12 @@ class Settings(BaseSettings):
     secret_key: SecretStr = SecretStr("development-only-change-this-secret-key")
     jwt_algorithm: str = "HS256"
     access_token_expire_minutes: int = Field(default=30, ge=5, le=1440)
+
+    # Bảo vệ đăng nhập: khóa theo tài khoản và IP sau nhiều lần thử sai.
+    login_max_failed_attempts: int = Field(default=5, ge=3, le=20)
+    login_ip_max_failed_attempts: int = Field(default=20, ge=5, le=200)
+    login_attempt_window_minutes: int = Field(default=15, ge=1, le=1440)
+    login_lockout_minutes: int = Field(default=15, ge=1, le=1440)
 
     # Frontend HTML/CSS/JS local được phép gọi API.
     cors_origins: tuple[str, ...] = (
@@ -150,7 +159,7 @@ class Settings(BaseSettings):
 
     @model_validator(mode="after")
     def validate_production_settings(self) -> "Settings":
-        """Không cho production dùng secret key mặc định."""
+        """Kiểm tra secret production và quan hệ giữa các ngưỡng bảo mật."""
 
         default_secret = "development-only-change-this-secret-key"
 
@@ -159,6 +168,12 @@ class Settings(BaseSettings):
             and self.secret_key.get_secret_value() == default_secret
         ):
             raise ValueError("SECRET_KEY must be changed in production.")
+
+        if self.login_ip_max_failed_attempts < self.login_max_failed_attempts:
+            raise ValueError(
+                "LOGIN_IP_MAX_FAILED_ATTEMPTS must be greater than or equal "
+                "to LOGIN_MAX_FAILED_ATTEMPTS."
+            )
 
         return self
 

@@ -23,16 +23,23 @@ class AuditAction(str, enum.Enum):
     """
 
     login = "login"
+    login_failed = "login_failed"
+    login_rate_limited = "login_rate_limited"
     logout = "logout"
 
     create_user = "create_user"
     update_user = "update_user"
+    reset_password = "reset_password"
+    activate_user = "activate_user"
     deactivate_user = "deactivate_user"
 
     create_patient = "create_patient"
+    view_patient = "view_patient"
     update_patient = "update_patient"
 
     create_prediction = "create_prediction"
+    create_prediction_failed = "create_prediction_failed"
+    view_prediction = "view_prediction"
     delete_expired_files = "delete_expired_files"
 
 

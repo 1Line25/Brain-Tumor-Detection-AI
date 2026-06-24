@@ -2,9 +2,11 @@ from __future__ import annotations
 
 from uuid import UUID
 
+from fastapi import Request
 from sqlalchemy import func, select
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 
+from app.core.request import get_client_ip, get_user_agent
 from app.models.audit_log import AuditAction, AuditLog
 from app.models.user import User
 from app.schemas.common import PaginatedResponse, PaginationParams
@@ -62,6 +64,28 @@ class AuditService:
 
         return audit_log
 
+    def log_request(
+        self,
+        *,
+        request: Request,
+        action: AuditAction,
+        actor: User | None = None,
+        entity_type: str | None = None,
+        entity_id: UUID | str | None = None,
+        metadata: dict | None = None,
+    ) -> AuditLog:
+        """Ghi audit log và tự lấy IP/user-agent từ HTTP request."""
+
+        return self.log(
+            action=action,
+            actor=actor,
+            entity_type=entity_type,
+            entity_id=entity_id,
+            ip_address=get_client_ip(request),
+            user_agent=get_user_agent(request),
+            metadata=metadata,
+        )
+
     def list_logs(
         self,
         *,
@@ -95,6 +119,7 @@ class AuditService:
 
         list_statement = (
             select(AuditLog)
+            .options(joinedload(AuditLog.actor))
             .order_by(AuditLog.created_at.desc())
             .offset(pagination.offset)
             .limit(pagination.page_size)

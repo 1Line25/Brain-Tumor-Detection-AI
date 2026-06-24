@@ -6,6 +6,7 @@ from threading import Lock
 
 import numpy as np
 from PIL import Image
+from loguru import logger
 
 from app.core.config import get_settings
 from app.models.prediction import TumorClass
@@ -26,7 +27,7 @@ class ModelPrediction:
 
 class ModelService:
     """
-    Service chạy inference với best_cnn_model.h5.
+    Service chạy inference với EfficientNetB0 trong best_tl_model.h5.
 
     Tối ưu:
     - Lazy-load model: chỉ load khi request đầu tiên cần dự đoán.
@@ -51,21 +52,28 @@ class ModelService:
         Quy trình:
         1. Load model nếu chưa có trong memory.
         2. Tiền xử lý ảnh giống lúc train.
-        3. Gọi model.predict().
+        3. Gọi model trực tiếp ở chế độ inference.
         4. Chuyển output thành nhãn, confidence và probabilities.
         """
 
         model = self.get_model()
         input_tensor = self._preprocess_image(image_path)
+        logger.info("Bắt đầu chạy inference cho ảnh MRI.")
 
-        # verbose=0 giúp log backend gọn hơn khi có nhiều request.
-        raw_prediction = model.predict(input_tensor, verbose=0)
+        # Gọi trực tiếp nhẹ hơn model.predict() cho từng ảnh đơn lẻ.
+        raw_prediction = model(input_tensor, training=False)
 
-        return self._parse_prediction(raw_prediction)
+        result = self._parse_prediction(raw_prediction)
+        logger.info(
+            "Inference hoàn tất | nhãn={} độ_tin_cậy={:.4f}",
+            result.predicted_class.value,
+            result.confidence,
+        )
+        return result
 
     def get_model(self):
         """
-        Load model từ best_cnn_model.h5 nếu chưa load.
+        Load model EfficientNetB0 từ best_tl_model.h5 nếu chưa load.
 
         TensorFlow được import trong hàm để các tác vụ không cần inference
         như migration/database check không bị khởi động nặng.
@@ -79,11 +87,16 @@ class ModelService:
                 return self.__class__._model
 
             if not self.model_path.exists():
-                raise FileNotFoundError(f"Model file not found: {self.model_path}")
+                logger.error("Không tìm thấy file model tại {}.", self.model_path)
+                raise FileNotFoundError(f"Không tìm thấy file model: {self.model_path}")
 
             from tensorflow.keras.models import load_model
 
-            self.__class__._model = load_model(self.model_path)
+            logger.info("Đang nạp model inference từ {}.", self.model_path)
+            # Backend chỉ inference nên không cần khôi phục optimizer/loss.
+            # compile=False cũng tránh lỗi khi model được lưu bởi phiên bản Keras khác.
+            self.__class__._model = load_model(self.model_path, compile=False)
+            logger.info("Đã nạp model inference thành công.")
 
         return self.__class__._model
 
@@ -103,18 +116,15 @@ class ModelService:
         Khớp notebook train:
         - resize về 240x240,
         - chuyển RGB,
-        - scale pixel từ 0..255 về 0..1,
+        - giữ pixel ở thang 0..255 vì EfficientNetB0 có preprocessing nội bộ,
         - thêm batch dimension: (H, W, C) -> (1, H, W, C).
         """
 
-        image = Image.open(image_path).convert("RGB")
-        image = image.resize(self.image_size)
+        with Image.open(image_path) as source_image:
+            image = source_image.convert("RGB").resize(self.image_size)
+            image_array = np.asarray(image, dtype=np.float32)
 
-        # Do model đã có layer Rescaling(1./255), backend không cần chia 255.0 nữa.
-        # Nếu chia 2 lần sẽ làm giá trị pixel quá nhỏ, khiến AI "bị mù" và luôn
-        # dự đoán "Không có u" với độ tự tin 100%.
-        image_array = np.asarray(image, dtype=np.float32)
-
+        # EfficientNetB0 của Keras có preprocessing nội bộ và nhận float 0..255.
         return np.expand_dims(image_array, axis=0)
 
     def _parse_prediction(self, raw_prediction) -> ModelPrediction:

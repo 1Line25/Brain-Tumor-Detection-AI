@@ -7,14 +7,19 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
 from app.main import app
+from app.db.base import Base
 from app.db.session import get_db
+import app.models  # noqa: F401
 
-# We use a test postgres database URL (needs to be created before running tests)
-# For the sake of the project, we assume the user will run tests with a test DB URL
-TEST_DATABASE_URL = "postgresql://admin:admin@localhost:5432/test_mydatabase"
+TEST_DATABASE_URL = "sqlite+pysqlite:///:memory:"
 
-engine = create_engine(TEST_DATABASE_URL, poolclass=StaticPool)
+engine = create_engine(
+    TEST_DATABASE_URL,
+    connect_args={"check_same_thread": False},
+    poolclass=StaticPool,
+)
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+Base.metadata.create_all(bind=engine)
 
 def override_get_db():
     try:

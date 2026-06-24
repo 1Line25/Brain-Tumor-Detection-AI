@@ -1,72 +1,114 @@
 // js/audit-logs.js
 document.addEventListener('DOMContentLoaded', () => {
-    let currentPage = 1;
     const pageSize = 15;
-    
     const tableBody = document.querySelector('#audit-table tbody');
     const paginationEl = document.getElementById('pagination');
 
     async function loadAuditLogs(page = 1) {
         try {
-            tableBody.innerHTML = '<tr><td colspan="5" class="text-center">Đang tải dữ liệu...</td></tr>';
-            const data = await apiFetch(`/audit-logs?page=${page}&page_size=${pageSize}`);
+            tableBody.innerHTML =
+                '<tr><td colspan="5" class="text-center">Đang tải dữ liệu...</td></tr>';
+            const data = await apiFetch(
+                `/audit-logs?page=${page}&page_size=${pageSize}`
+            );
             renderTable(data.items);
-            renderPagination(data.page, data.pages);
+            renderPagination(data.page, data.total_pages);
         } catch (error) {
-            tableBody.innerHTML = `<tr><td colspan="5" class="text-center text-error">${error.message}</td></tr>`;
+            tableBody.textContent = '';
+            const row = document.createElement('tr');
+            const cell = document.createElement('td');
+            cell.colSpan = 5;
+            cell.className = 'text-center text-error';
+            cell.textContent = error.message;
+            row.appendChild(cell);
+            tableBody.appendChild(row);
         }
+    }
+
+    function appendCell(row, value, className = '') {
+        const cell = document.createElement('td');
+        cell.textContent = value ?? '-';
+        if (className) cell.className = className;
+        row.appendChild(cell);
+        return cell;
     }
 
     function renderTable(items) {
+        tableBody.textContent = '';
+
         if (!items || items.length === 0) {
-            tableBody.innerHTML = '<tr><td colspan="5" class="text-center">Chưa có nhật ký nào</td></tr>';
+            const row = document.createElement('tr');
+            const cell = document.createElement('td');
+            cell.colSpan = 5;
+            cell.className = 'text-center';
+            cell.textContent = 'Chưa có nhật ký nào';
+            row.appendChild(cell);
+            tableBody.appendChild(row);
             return;
         }
 
-        tableBody.innerHTML = items.map(log => {
+        items.forEach(log => {
+            const row = document.createElement('tr');
             const date = new Date(log.created_at).toLocaleString('vi-VN');
-            const actorName = log.actor ? log.actor.username : 'Hệ thống';
-            
-            return `
-                <tr>
-                    <td style="font-size: 0.8rem; color: var(--text-secondary);">${date}</td>
-                    <td><strong>${actorName}</strong></td>
-                    <td><span class="badge" style="background-color: var(--border-color); color: var(--text-primary);">${log.action}</span></td>
-                    <td>${log.entity_type} <span style="color: var(--text-secondary); font-size: 0.75rem;">(${log.entity_id})</span></td>
-                    <td style="font-size: 0.8rem;">${log.ip_address || '-'}</td>
-                </tr>
-            `;
-        }).join('');
+            const actorName = log.actor?.username || 'Hệ thống/không xác định';
+
+            appendCell(row, date);
+            appendCell(row, actorName);
+
+            const actionCell = document.createElement('td');
+            const badge = document.createElement('span');
+            badge.className = 'badge';
+            badge.style.backgroundColor = 'var(--border-color)';
+            badge.style.color = 'var(--text-primary)';
+            badge.textContent = log.action;
+            actionCell.appendChild(badge);
+            row.appendChild(actionCell);
+
+            const entityLabel = log.entity_type
+                ? `${log.entity_type}${log.entity_id ? ` (${log.entity_id})` : ''}`
+                : '-';
+            appendCell(row, entityLabel);
+            appendCell(row, log.ip_address || '-');
+
+            tableBody.appendChild(row);
+        });
     }
 
     function renderPagination(page, totalPages) {
-        paginationEl.innerHTML = '';
+        paginationEl.textContent = '';
         if (totalPages <= 1) return;
 
-        // Prev
-        const prevBtn = document.createElement('button');
-        prevBtn.className = 'page-item';
-        prevBtn.textContent = 'Trước';
-        prevBtn.disabled = page === 1;
-        prevBtn.onclick = () => { currentPage = page - 1; loadAuditLogs(currentPage); };
-        paginationEl.appendChild(prevBtn);
+        const previousButton = document.createElement('button');
+        previousButton.className = 'page-item';
+        previousButton.textContent = 'Trước';
+        previousButton.disabled = page === 1;
+        previousButton.addEventListener(
+            'click',
+            () => loadAuditLogs(page - 1)
+        );
+        paginationEl.appendChild(previousButton);
 
-        // Pages
-        for (let i = 1; i <= totalPages; i++) {
-            const btn = document.createElement('button');
-            btn.className = `page-item ${i === page ? 'active' : ''}`;
-            btn.textContent = i;
-            btn.onclick = () => { currentPage = i; loadAuditLogs(currentPage); };
-            paginationEl.appendChild(btn);
+        for (let pageNumber = 1; pageNumber <= totalPages; pageNumber += 1) {
+            const pageButton = document.createElement('button');
+            pageButton.className =
+                `page-item ${pageNumber === page ? 'active' : ''}`;
+            pageButton.textContent = pageNumber;
+            pageButton.addEventListener(
+                'click',
+                () => loadAuditLogs(pageNumber)
+            );
+            paginationEl.appendChild(pageButton);
         }
 
-        // Next
-        const nextBtn = document.createElement('button');
-        nextBtn.className = 'page-item';
-        nextBtn.textContent = 'Sau';
-        nextBtn.disabled = page === totalPages;
-        nextBtn.onclick = () => { currentPage = page + 1; loadAuditLogs(currentPage); };
-        paginationEl.appendChild(nextBtn);
+        const nextButton = document.createElement('button');
+        nextButton.className = 'page-item';
+        nextButton.textContent = 'Sau';
+        nextButton.disabled = page === totalPages;
+        nextButton.addEventListener(
+            'click',
+            () => loadAuditLogs(page + 1)
+        );
+        paginationEl.appendChild(nextButton);
     }
 
     loadAuditLogs();

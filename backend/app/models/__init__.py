@@ -12,6 +12,7 @@ Lưu ý tối ưu:
 """
 
 from app.models.audit_log import AuditAction, AuditLog
+from app.models.login_throttle import LoginThrottle
 from app.models.patient import Patient, PatientSex
 from app.models.prediction import Prediction, PredictionStatus, TumorClass
 from app.models.user import User, UserRole
@@ -19,6 +20,7 @@ from app.models.user import User, UserRole
 __all__ = [
     "AuditAction",
     "AuditLog",
+    "LoginThrottle",
     "Patient",
     "PatientSex",
     "Prediction",

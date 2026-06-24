@@ -24,8 +24,8 @@ class GradCAMService:
         # Notebook train của dự án dùng IMG_SIZE = (240, 240).
         self.image_size = settings.model_input_size
 
-        # Đã kiểm tra trực tiếp best_cnn_model.h5:
-        # Conv2D cuối cùng là conv2d_13.
+        # EfficientNetB0 nằm dưới dạng nested model; mặc định dùng top_conv.
+        # Nếu tên layer thay đổi, service sẽ tự tìm Conv2D cuối cùng.
         self.last_conv_layer_name = settings.gradcam_last_conv_layer_name
 
     def generate(
@@ -45,42 +45,27 @@ class GradCAMService:
         import tensorflow as tf
 
         preprocessed_image = self._preprocess_image(image_path)
-        target_layer = self._get_target_conv_layer(model, tf)
+        owner_model, target_layer, target_layer_idx = self._find_target_conv_layer(
+            model,
+            tf,
+        )
+        feature_model = tf.keras.models.Model(
+            owner_model.inputs,
+            target_layer.output,
+        )
+        classifier_model = self._build_classifier_after_target(
+            root_model=model,
+            owner_model=owner_model,
+            target_layer=target_layer,
+            target_layer_idx=target_layer_idx,
+            tf=tf,
+        )
 
-        # Tạo classifier động để giải quyết lỗi mất kết nối gradient trong Keras 3
-        # khi dùng model Sequential.
-        target_layer_idx = None
-        for i, layer in enumerate(model.layers):
-            if layer.name == target_layer.name:
-                target_layer_idx = i
-                break
-
-        if target_layer_idx is not None:
-            last_conv_layer_model = tf.keras.models.Model(model.inputs, target_layer.output)
-            classifier_input = tf.keras.Input(shape=target_layer.output.shape[1:])
-            x = classifier_input
-            for layer in model.layers[target_layer_idx + 1:]:
-                x = layer(x)
-            classifier_model = tf.keras.models.Model(classifier_input, x)
-
-            with tf.GradientTape() as tape:
-                conv_outputs = last_conv_layer_model(preprocessed_image)
-                tape.watch(conv_outputs)
-                predictions = classifier_model(conv_outputs)
-                class_score = predictions[:, class_index]
-        else:
-            # Fallback cho transfer learning / nested models
-            grad_model = tf.keras.models.Model(
-                inputs=model.inputs,
-                outputs=[
-                    target_layer.output,
-                    model.outputs[0] if isinstance(model.outputs, list) else model.output,
-                ],
-            )
-
-            with tf.GradientTape() as tape:
-                conv_outputs, predictions = grad_model(preprocessed_image)
-                class_score = predictions[:, class_index]
+        with tf.GradientTape() as tape:
+            conv_outputs = feature_model(preprocessed_image, training=False)
+            tape.watch(conv_outputs)
+            predictions = classifier_model(conv_outputs, training=False)
+            class_score = predictions[:, class_index]
 
         grads = tape.gradient(class_score, conv_outputs)
 
@@ -118,7 +103,7 @@ class GradCAMService:
         Tìm Conv2D layer cuối cùng trong model.
 
         Đây là fallback nếu config bị sai tên layer.
-        Với best_cnn_model.h5 hiện tại, kết quả mong đợi là conv2d_13.
+        Với EfficientNetB0, kết quả mong đợi thường là top_conv.
         """
 
         import tensorflow as tf
@@ -135,30 +120,134 @@ class GradCAMService:
 
         raise ValueError("No Conv2D layer found in model")
 
-    def _get_target_conv_layer(self, model: Any, tf: Any) -> Any:
+    def _find_target_conv_layer(
+        self,
+        model: Any,
+        tf: Any,
+    ) -> tuple[Any, Any, int]:
         """
-        Lấy layer Conv2D dùng cho Grad-CAM.
+        Trả về model sở hữu layer, layer Conv2D đích và vị trí của layer.
 
-        Ưu tiên conv2d_13; nếu không tồn tại thì tự tìm Conv2D cuối cùng.
+        EfficientNetB0 là một model lồng bên trong model phân loại, vì vậy gọi
+        root_model.get_layer("top_conv") trực tiếp sẽ không tìm thấy layer.
         """
 
-        try:
-            return model.get_layer(self.last_conv_layer_name)
-        except ValueError:
-            fallback_layer_name = self.find_last_conv_layer_name(model)
-            self.last_conv_layer_name = fallback_layer_name
-            return model.get_layer(fallback_layer_name)
+        configured = self._find_named_conv_layer(
+            model,
+            self.last_conv_layer_name,
+            tf,
+        )
+        if configured is not None:
+            return configured
+
+        fallback = self._find_last_conv_layer(model, tf)
+        if fallback is None:
+            raise ValueError("No Conv2D layer found in model")
+
+        self.last_conv_layer_name = fallback[1].name
+        return fallback
+
+    def _find_named_conv_layer(
+        self,
+        model: Any,
+        layer_name: str,
+        tf: Any,
+    ) -> tuple[Any, Any, int] | None:
+        """Tìm một Conv2D theo tên trong cả model gốc và nested models."""
+
+        for index, layer in enumerate(model.layers):
+            if (
+                layer.name == layer_name
+                and isinstance(layer, tf.keras.layers.Conv2D)
+            ):
+                return model, layer, index
+
+            if isinstance(layer, tf.keras.Model):
+                nested_result = self._find_named_conv_layer(
+                    layer,
+                    layer_name,
+                    tf,
+                )
+                if nested_result is not None:
+                    return nested_result
+
+        return None
+
+    def _find_last_conv_layer(
+        self,
+        model: Any,
+        tf: Any,
+    ) -> tuple[Any, Any, int] | None:
+        """Tìm Conv2D cuối cùng theo thứ tự ngược, hỗ trợ nested models."""
+
+        for index in range(len(model.layers) - 1, -1, -1):
+            layer = model.layers[index]
+
+            if isinstance(layer, tf.keras.Model):
+                nested_result = self._find_last_conv_layer(layer, tf)
+                if nested_result is not None:
+                    return nested_result
+
+            if isinstance(layer, tf.keras.layers.Conv2D):
+                return model, layer, index
+
+        return None
+
+    def _build_classifier_after_target(
+        self,
+        *,
+        root_model: Any,
+        owner_model: Any,
+        target_layer: Any,
+        target_layer_idx: int,
+        tf: Any,
+    ) -> Any:
+        """
+        Dựng phần model từ output Conv2D đích đến output phân loại.
+
+        Với EfficientNetB0, phần này gồm các layer còn lại trong backbone rồi
+        đến GlobalAveragePooling/Dense head của root model.
+        """
+
+        classifier_input = tf.keras.Input(
+            shape=target_layer.output.shape[1:],
+        )
+        x = classifier_input
+
+        for layer in owner_model.layers[target_layer_idx + 1:]:
+            if not isinstance(layer, tf.keras.layers.InputLayer):
+                x = layer(x)
+
+        if owner_model is not root_model:
+            owner_index = next(
+                (
+                    index
+                    for index, layer in enumerate(root_model.layers)
+                    if layer is owner_model
+                ),
+                None,
+            )
+            if owner_index is None:
+                raise ValueError(
+                    "Nested model containing Grad-CAM layer is not attached "
+                    "directly to the root model"
+                )
+
+            for layer in root_model.layers[owner_index + 1:]:
+                if not isinstance(layer, tf.keras.layers.InputLayer):
+                    x = layer(x)
+
+        return tf.keras.models.Model(classifier_input, x)
 
     def _preprocess_image(self, image_path: str | Path) -> np.ndarray:
         """
         Tiền xử lý ảnh giống lúc train:
-        resize 240x240, RGB, scale pixel 0..1, thêm batch dimension.
+        resize 240x240, RGB, giữ pixel 0..255, thêm batch dimension.
         """
 
-        image = Image.open(image_path).convert("RGB")
-        image = image.resize(self.image_size)
-
-        image_array = np.asarray(image, dtype=np.float32)
+        with Image.open(image_path) as source_image:
+            image = source_image.convert("RGB").resize(self.image_size)
+            image_array = np.asarray(image, dtype=np.float32)
 
         return np.expand_dims(image_array, axis=0)
 
@@ -173,8 +262,10 @@ class GradCAMService:
         Overlay heatmap lên ảnh MRI gốc và trả về PNG bytes.
         """
 
-        original_image = Image.open(image_path).convert("RGB")
-        original_size = original_image.size
+        with Image.open(image_path) as source_image:
+            original_image = source_image.convert("RGB")
+            original_size = original_image.size
+            original_array = np.asarray(original_image, dtype=np.uint8)
 
         heatmap_resized = cv2.resize(heatmap, original_size)
         heatmap_uint8 = np.uint8(255 * heatmap_resized)
@@ -182,8 +273,6 @@ class GradCAMService:
         # COLORMAP_JET là kiểu hiển thị Grad-CAM phổ biến, dễ nhìn khi demo.
         colored_heatmap = cv2.applyColorMap(heatmap_uint8, cv2.COLORMAP_JET)
         colored_heatmap = cv2.cvtColor(colored_heatmap, cv2.COLOR_BGR2RGB)
-
-        original_array = np.asarray(original_image, dtype=np.uint8)
 
         overlay = cv2.addWeighted(
             original_array,

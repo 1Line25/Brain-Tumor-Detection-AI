@@ -110,11 +110,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             resConfidence.textContent = `${(result.confidence * 100).toFixed(2)}%`;
             
-            // Set images with token (for FastAPI serving static files or endpoints that might need auth, but typically static paths don't have token auth in this basic setup. Assuming static files are publicly accessible or handled by cookies. If they are protected APIs, we need to fetch them as blob. Let's try simple src first).
-            // Usually, FastAPI static files don't require JWT. We will just set the SRC to the backend URL.
-            const baseUrl = 'http://localhost:8000';
-            resOriginalImg.src = `${baseUrl}/${result.mri_image_path}`;
-            resGradcamImg.src = result.gradcam_image_path ? `${baseUrl}/${result.gradcam_image_path}` : '';
+            // Ảnh được truy cập qua Nginx cùng origin với frontend.
+            const buildStorageUrl = (path) => `/${String(path).replace(/^\/+/, '')}`;
+            resOriginalImg.src = buildStorageUrl(result.mri_image_path);
+            resGradcamImg.src = result.gradcam_image_path ? buildStorageUrl(result.gradcam_image_path) : '';
 
             resultContainer.classList.remove('hidden');
             resultContainer.scrollIntoView({ behavior: 'smooth' });

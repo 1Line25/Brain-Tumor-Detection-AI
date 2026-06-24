@@ -1,8 +1,10 @@
 // js/users.js
 document.addEventListener('DOMContentLoaded', () => {
     const tableBody = document.querySelector('#users-table tbody');
-    
-    // Modal elements
+    const paginationEl = document.getElementById('pagination');
+    const pageSize = 20;
+    let currentPage = 1;
+
     const modal = document.getElementById('user-modal');
     const btnAdd = document.getElementById('btn-add-user');
     const btnClose = document.getElementById('btn-close-modal');
@@ -11,61 +13,149 @@ document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('user-form');
     const formError = document.getElementById('form-error');
 
-    async function loadUsers() {
+    function appendCell(row, value, options = {}) {
+        const cell = document.createElement('td');
+        const element = options.strong
+            ? document.createElement('strong')
+            : document.createTextNode(String(value ?? '-'));
+
+        if (options.strong) {
+            element.textContent = String(value ?? '-');
+        }
+
+        cell.appendChild(element);
+        row.appendChild(cell);
+        return cell;
+    }
+
+    async function loadUsers(page = 1) {
         try {
-            tableBody.innerHTML = '<tr><td colspan="5" class="text-center">Đang tải dữ liệu...</td></tr>';
-            const users = await apiFetch('/users');
-            renderTable(users);
+            tableBody.innerHTML =
+                '<tr><td colspan="6" class="text-center">Đang tải dữ liệu...</td></tr>';
+
+            const data = await apiFetch(
+                `/users?page=${page}&page_size=${pageSize}`
+            );
+
+            currentPage = data.page;
+            renderTable(data.items);
+            renderPagination(data.page, data.total_pages);
         } catch (error) {
-            tableBody.innerHTML = `<tr><td colspan="5" class="text-center text-error">${error.message}</td></tr>`;
+            tableBody.textContent = '';
+            const row = document.createElement('tr');
+            const cell = document.createElement('td');
+            cell.colSpan = 6;
+            cell.className = 'text-center text-error';
+            cell.textContent = error.message;
+            row.appendChild(cell);
+            tableBody.appendChild(row);
         }
     }
 
     function renderTable(users) {
+        tableBody.textContent = '';
+
         if (!users || users.length === 0) {
-            tableBody.innerHTML = '<tr><td colspan="5" class="text-center">Chưa có người dùng nào</td></tr>';
+            const row = document.createElement('tr');
+            const cell = document.createElement('td');
+            cell.colSpan = 6;
+            cell.className = 'text-center';
+            cell.textContent = 'Chưa có tài khoản nào';
+            row.appendChild(cell);
+            tableBody.appendChild(row);
             return;
         }
 
-        tableBody.innerHTML = users.map(u => {
-            const roleBadge = u.role === 'admin' ? 'badge-admin' : 'badge-doctor';
-            const statusBadge = u.is_active ? 
-                '<span class="badge" style="background-color: rgba(16, 185, 129, 0.2); color: #6ee7b7;">Hoạt động</span>' : 
-                '<span class="badge" style="background-color: rgba(239, 68, 68, 0.2); color: #fca5a5;">Bị khóa</span>';
-            
-            const toggleAction = u.is_active ? 
-                `<button class="btn btn-outline btn-sm btn-toggle" data-id="${u.id}" data-action="deactivate" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;">Khóa</button>` :
-                `<button class="btn btn-outline btn-sm btn-toggle" data-id="${u.id}" data-action="activate" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;">Mở khóa</button>`;
+        users.forEach(user => {
+            const row = document.createElement('tr');
+            appendCell(row, user.username, { strong: true });
+            appendCell(row, user.full_name);
+            appendCell(row, user.email);
 
-            return `
-                <tr>
-                    <td><strong>${u.username}</strong></td>
-                    <td>${u.email}</td>
-                    <td><span class="badge ${roleBadge}">${u.role.toUpperCase()}</span></td>
-                    <td>${statusBadge}</td>
-                    <td>${toggleAction}</td>
-                </tr>
-            `;
-        }).join('');
+            const roleCell = document.createElement('td');
+            const roleBadge = document.createElement('span');
+            roleBadge.className =
+                `badge ${user.role === 'admin' ? 'badge-admin' : 'badge-doctor'}`;
+            roleBadge.textContent = user.role.toUpperCase();
+            roleCell.appendChild(roleBadge);
+            row.appendChild(roleCell);
 
-        // Attach events
-        document.querySelectorAll('.btn-toggle').forEach(btn => {
-            btn.addEventListener('click', () => toggleUserStatus(btn.dataset.id, btn.dataset.action));
+            const statusCell = document.createElement('td');
+            const statusBadge = document.createElement('span');
+            statusBadge.className = 'badge';
+            statusBadge.style.backgroundColor = user.is_active
+                ? 'rgba(16, 185, 129, 0.2)'
+                : 'rgba(239, 68, 68, 0.2)';
+            statusBadge.style.color = user.is_active ? '#6ee7b7' : '#fca5a5';
+            statusBadge.textContent = user.is_active ? 'Hoạt động' : 'Bị khóa';
+            statusCell.appendChild(statusBadge);
+            row.appendChild(statusCell);
+
+            const actionCell = document.createElement('td');
+            const toggleButton = document.createElement('button');
+            toggleButton.className = 'btn btn-outline btn-sm btn-toggle';
+            toggleButton.dataset.id = user.id;
+            toggleButton.dataset.action =
+                user.is_active ? 'deactivate' : 'activate';
+            toggleButton.style.padding = '0.25rem 0.5rem';
+            toggleButton.style.fontSize = '0.75rem';
+            toggleButton.textContent = user.is_active ? 'Khóa' : 'Mở khóa';
+            toggleButton.addEventListener('click', () => {
+                toggleUserStatus(
+                    toggleButton.dataset.id,
+                    toggleButton.dataset.action
+                );
+            });
+            actionCell.appendChild(toggleButton);
+            row.appendChild(actionCell);
+
+            tableBody.appendChild(row);
         });
     }
 
+    function renderPagination(page, totalPages) {
+        paginationEl.textContent = '';
+        if (totalPages <= 1) return;
+
+        const previousButton = document.createElement('button');
+        previousButton.className = 'page-item';
+        previousButton.textContent = 'Trước';
+        previousButton.disabled = page === 1;
+        previousButton.addEventListener('click', () => loadUsers(page - 1));
+        paginationEl.appendChild(previousButton);
+
+        for (let pageNumber = 1; pageNumber <= totalPages; pageNumber += 1) {
+            const pageButton = document.createElement('button');
+            pageButton.className =
+                `page-item ${pageNumber === page ? 'active' : ''}`;
+            pageButton.textContent = pageNumber;
+            pageButton.addEventListener(
+                'click',
+                () => loadUsers(pageNumber)
+            );
+            paginationEl.appendChild(pageButton);
+        }
+
+        const nextButton = document.createElement('button');
+        nextButton.className = 'page-item';
+        nextButton.textContent = 'Sau';
+        nextButton.disabled = page === totalPages;
+        nextButton.addEventListener('click', () => loadUsers(page + 1));
+        paginationEl.appendChild(nextButton);
+    }
+
     async function toggleUserStatus(id, action) {
-        if (!confirm(`Bạn có chắc muốn ${action === 'activate' ? 'Mở khóa' : 'Khóa'} tài khoản này?`)) return;
-        
+        const actionLabel = action === 'activate' ? 'mở khóa' : 'khóa';
+        if (!confirm(`Bạn có chắc muốn ${actionLabel} tài khoản này?`)) return;
+
         try {
             await apiFetch(`/users/${id}/${action}`, { method: 'POST' });
-            loadUsers();
+            await loadUsers(currentPage);
         } catch (error) {
-            alert('Lỗi: ' + error.message);
+            alert(`Lỗi: ${error.message}`);
         }
     }
 
-    // Modal Operations
     function openModal() {
         modal.classList.remove('hidden');
         formError.classList.add('hidden');
@@ -80,9 +170,9 @@ document.addEventListener('DOMContentLoaded', () => {
     btnClose.addEventListener('click', closeModal);
     btnCancel.addEventListener('click', closeModal);
 
-    btnSave.addEventListener('click', async (e) => {
-        e.preventDefault();
-        
+    btnSave.addEventListener('click', async event => {
+        event.preventDefault();
+
         if (!form.checkValidity()) {
             form.reportValidity();
             return;
@@ -91,6 +181,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const payload = {
             username: document.getElementById('username').value,
             email: document.getElementById('email').value,
+            full_name: document.getElementById('full-name').value,
             password: document.getElementById('password').value,
             role: document.getElementById('role').value
         };
@@ -98,14 +189,14 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             btnSave.disabled = true;
             btnSave.textContent = 'Đang lưu...';
-            
+
             await apiFetch('/users', {
                 method: 'POST',
                 body: payload
             });
-            
+
             closeModal();
-            loadUsers();
+            await loadUsers(1);
         } catch (error) {
             formError.textContent = error.message;
             formError.classList.remove('hidden');
