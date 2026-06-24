@@ -54,6 +54,6 @@ jobs:
     - name: Run Pytest
       working-directory: ./backend
       env:
-        DATABASE_URL: postgresql://admin:admin@localhost:5432/test_mydatabase
+        DATABASE_URL: postgresql+psycopg://admin:admin@localhost:5432/test_mydatabase
       run: |
         pytest tests/ -v
