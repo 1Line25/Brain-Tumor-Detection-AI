@@ -6,7 +6,7 @@ FROM python:3.11-slim
 # Mục đích:
 # - Đóng gói FastAPI backend để demo/chạy ổn định.
 # - Chỉ phục vụ inference, không train model trong container.
-# - Model best_cnn_model.h5 được copy từ root project vào container.
+# - Model EfficientNetB0 best_tl_model.h5 được copy từ root project vào container.
 # ============================================================
 
 
@@ -46,12 +46,12 @@ COPY backend/scripts /app/scripts
 
 # Copy model đã train từ root project.
 # Dự án không dùng folder model/, đúng theo yêu cầu của bạn.
-COPY best_cnn_model.h5 /app/best_cnn_model.h5
+COPY best_tl_model.h5 /app/best_tl_model.h5
 
 
 # Tạo storage trong container để lưu MRI/Grad-CAM khi chạy demo.
 # Nếu dùng docker-compose, nên mount volume ra ngoài để dữ liệu không mất khi restart.
-RUN mkdir -p /app/storage/mri /app/storage/gradcam
+RUN mkdir -p /app/storage/mri /app/storage/gradcam /app/logs
 
 
 EXPOSE 8000
@@ -59,4 +59,4 @@ EXPOSE 8000
 
 # Chạy FastAPI bằng Uvicorn.
 # app.main:app trỏ tới biến app trong backend/app/main.py.
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--no-access-log", "--log-level", "warning"]
