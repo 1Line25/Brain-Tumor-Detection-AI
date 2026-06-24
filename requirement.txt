@@ -1,14 +1,18 @@
+# ============================================================
+# DUNG CHUNG: backend inference va notebook train model
+# ============================================================
+tensorflow>=2.20.0
+h5py>=3.11.0
 numpy>=2.0.0
-pandas>=2.2.0
 opencv-python-headless>=4.10.0
 Pillow>=10.0.0
-scikit-learn>=1.6.0
-tensorflow>=2.20.0
-matplotlib>=3.10.0
-seaborn>=0.13.0
-streamlit>=1.40.0
 
-# Backend API
+
+# ============================================================
+# BACKEND
+# ============================================================
+
+# API
 fastapi>=0.115.0
 uvicorn[standard]>=0.30.0
 python-multipart>=0.0.9
@@ -17,8 +21,32 @@ python-multipart>=0.0.9
 SQLAlchemy>=2.0.0
 psycopg[binary]>=3.2.0
 
-# Settings, validation, security
+# Cau hinh va validation
+pydantic>=2.8.0
 pydantic-settings>=2.4.0
+python-dotenv>=1.0.1
 email-validator>=2.2.0
+
+# Xac thuc va ma hoa mat khau
 PyJWT>=2.9.0
 pwdlib[argon2]>=0.2.0
+
+# Logging
+loguru>=0.7.0
+
+
+# ============================================================
+# FRONTEND
+# ============================================================
+# Khong co Python/npm dependency.
+# Frontend dung HTML, CSS, JavaScript thuan, Google Fonts va
+# nginx:alpine khi chay bang Docker.
+
+
+# ============================================================
+# TRAIN MODEL, PHAN TICH DU LIEU VA DANH GIA
+# ============================================================
+pandas>=2.2.0
+scikit-learn>=1.6.0
+matplotlib>=3.10.0
+seaborn>=0.13.0
