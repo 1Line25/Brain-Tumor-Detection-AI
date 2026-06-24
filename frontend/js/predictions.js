@@ -87,6 +87,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         formError.classList.add('hidden');
+        resultContainer.classList.add('hidden');
         btnPredict.disabled = true;
         btnPredict.textContent = 'Đang phân tích, vui lòng chờ...';
 
@@ -119,6 +120,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             resultContainer.scrollIntoView({ behavior: 'smooth' });
 
         } catch (error) {
+            resultContainer.classList.add('hidden');
             formError.textContent = error.message;
             formError.classList.remove('hidden');
         } finally {

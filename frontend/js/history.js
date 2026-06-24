@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
             tableBody.innerHTML = '<tr><td colspan="6" class="text-center">Đang tải dữ liệu...</td></tr>';
             const data = await apiFetch(`/predictions?page=${page}&page_size=${pageSize}`);
             renderTable(data.items);
-            renderPagination(data.page, data.pages);
+            renderPagination(data.page, data.total_pages);
         } catch (error) {
             tableBody.innerHTML = `<tr><td colspan="6" class="text-center text-error">${error.message}</td></tr>`;
         }

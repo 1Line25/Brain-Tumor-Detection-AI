@@ -12,6 +12,8 @@ from fastapi import (
     UploadFile,
     status,
 )
+from fastapi.encoders import jsonable_encoder
+from fastapi.responses import JSONResponse
 
 from app.api.deps import AdminUser, DbSession, DoctorOrAdminUser
 from app.models.audit_log import AuditAction
@@ -19,8 +21,8 @@ from app.models.prediction import PredictionStatus, TumorClass
 from app.schemas.common import MessageResponse, PaginatedResponse, PaginationParams
 from app.schemas.prediction import (
     PredictionDetail,
+    PredictionFailed,
     PredictionFilter,
-    PredictionRead,
     PredictionResult,
 )
 from app.services.patient_service import PatientService
@@ -36,8 +38,14 @@ router = APIRouter(
 
 @router.post(
     "",
-    response_model=PredictionResult | PredictionRead,
+    response_model=PredictionResult,
     status_code=status.HTTP_201_CREATED,
+    responses={
+        status.HTTP_503_SERVICE_UNAVAILABLE: {
+            "model": PredictionFailed,
+            "description": "Model inference failed after the request was recorded",
+        },
+    },
 )
 def create_prediction(
     request: Request,
@@ -45,7 +53,7 @@ def create_prediction(
     current_user: DoctorOrAdminUser,
     patient_id: UUID = Form(...),
     mri_image: UploadFile = File(...),
-) -> PredictionResult | PredictionRead:
+) -> PredictionResult | JSONResponse:
     """
     Upload ảnh MRI và chạy dự đoán u não.
 
@@ -131,7 +139,14 @@ def create_prediction(
         ) from exc
 
     if prediction.status == PredictionStatus.failed:
-        return PredictionRead.model_validate(prediction)
+        failure = PredictionFailed(
+            prediction_id=prediction.id,
+            message="Prediction could not be completed. Please try again later.",
+        )
+        return JSONResponse(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            content=jsonable_encoder(failure),
+        )
 
     if (
         prediction.predicted_class is None

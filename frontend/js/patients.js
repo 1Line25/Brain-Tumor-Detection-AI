@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             const data = await apiFetch(url);
             renderTable(data.items);
-            renderPagination(data.page, data.pages);
+            renderPagination(data.page, data.total_pages);
         } catch (error) {
             tableBody.innerHTML = `<tr><td colspan="6" class="text-center text-error">${error.message}</td></tr>`;
         }
