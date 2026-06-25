@@ -17,13 +17,6 @@ class PatientBase(BaseModel):
     để tránh viết lặp code.
     """
 
-    patient_code: str = Field(
-        ...,
-        min_length=3,
-        max_length=40,
-        examples=["BN001"],
-    )
-
     full_name: str = Field(
         ...,
         min_length=2,
@@ -52,19 +45,6 @@ class PatientBase(BaseModel):
         max_length=2000,
         examples=["Bệnh nhân có tiền sử đau đầu kéo dài."],
     )
-
-    @field_validator("patient_code")
-    @classmethod
-    def normalize_patient_code(cls, value: str) -> str:
-        """
-        Chuẩn hóa mã bệnh nhân.
-
-        Tối ưu:
-        - Loại bỏ khoảng trắng thừa.
-        - Chuyển uppercase để tránh trùng kiểu bn001 và BN001.
-        """
-
-        return value.strip().upper()
 
     @field_validator("full_name")
     @classmethod
@@ -115,8 +95,8 @@ class PatientCreate(PatientBase):
     """
     Request tạo hồ sơ bệnh nhân.
 
-    created_by không nằm trong request vì backend sẽ lấy từ user đang đăng nhập,
-    tránh việc frontend giả mạo người tạo hồ sơ.
+    patient_code và created_by không nằm trong request. Database tự sinh mã
+    bệnh nhân duy nhất; backend lấy người tạo từ user đang đăng nhập.
     """
 
     pass

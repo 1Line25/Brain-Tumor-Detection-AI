@@ -53,6 +53,7 @@ Dự án bao gồm cả quy trình nghiên cứu mô hình và ứng dụng web:
 
 - Đăng nhập bằng username hoặc email.
 - Tạo và cập nhật bệnh nhân do mình quản lý.
+- Mã bệnh nhân được tự động sinh duy nhất khi tạo hồ sơ mới.
 - Chỉ xem dữ liệu bệnh nhân và lịch sử dự đoán thuộc phạm vi được cấp.
 - Tải ảnh MRI lên để chạy phân loại.
 - Xem lớp dự đoán, độ tin cậy và ảnh Grad-CAM.
@@ -234,7 +235,8 @@ Database tự tạo hai tài khoản:
 ### Quy trình dành cho bác sĩ
 
 1. Mở <http://localhost:8080> và đăng nhập bằng tài khoản bác sĩ.
-2. Vào **Bệnh nhân** để chọn bệnh nhân có sẵn hoặc tạo hồ sơ mới.
+2. Vào **Bệnh nhân** để chọn bệnh nhân có sẵn hoặc tạo hồ sơ mới. Hệ thống tự
+   sinh mã dạng `BN000003`, người dùng không cần nhập mã thủ công.
 3. Mở **Chẩn đoán**, chọn bệnh nhân và tải ảnh MRI lên.
 4. Nhấn thực hiện chẩn đoán và chờ model xử lý.
 5. Kiểm tra lớp dự đoán, độ tin cậy, ảnh MRI gốc và Grad-CAM.

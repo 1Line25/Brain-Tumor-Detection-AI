@@ -191,10 +191,17 @@ EXECUTE FUNCTION set_updated_at();
 -- Lưu hồ sơ bệnh nhân.
 -- Tách riêng khỏi predictions để tránh lặp thông tin bệnh nhân nhiều lần.
 
+CREATE SEQUENCE IF NOT EXISTS patient_code_seq
+START WITH 1
+INCREMENT BY 1
+MINVALUE 1;
+
+
 CREATE TABLE IF NOT EXISTS patients (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
 
-    patient_code VARCHAR(40) NOT NULL UNIQUE,
+    patient_code VARCHAR(40) NOT NULL UNIQUE
+        DEFAULT ('BN' || LPAD(nextval('patient_code_seq')::TEXT, 6, '0')),
     full_name VARCHAR(120) NOT NULL,
     date_of_birth DATE NULL,
     sex patient_sex NOT NULL DEFAULT 'unknown',
@@ -216,6 +223,31 @@ CREATE TABLE IF NOT EXISTS patients (
 
     CONSTRAINT ck_patients_full_name_min_length
         CHECK (char_length(full_name) >= 2)
+);
+
+
+-- Áp dụng default cho cả database đã tồn tại từ phiên bản cũ.
+ALTER TABLE patients
+ALTER COLUMN patient_code
+SET DEFAULT ('BN' || LPAD(nextval('patient_code_seq')::TEXT, 6, '0'));
+
+
+-- Đồng bộ sequence với mã BN lớn nhất hiện có để lần sinh tiếp theo không
+-- quay lại các số đã được nhập thủ công hoặc tạo bởi phiên bản trước.
+SELECT setval(
+    'patient_code_seq',
+    GREATEST(
+        COALESCE(
+            (
+                SELECT MAX(SUBSTRING(patient_code FROM 3)::BIGINT)
+                FROM patients
+                WHERE patient_code ~ '^BN[0-9]{1,18}$'
+            ),
+            0
+        ) + 1,
+        1
+    ),
+    FALSE
 );
 
 

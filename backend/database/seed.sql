@@ -136,6 +136,24 @@ SET
     notes = EXCLUDED.notes;
 
 
+-- Seed chèn mã bệnh nhân tường minh nên cần đưa sequence tới số kế tiếp.
+SELECT setval(
+    'patient_code_seq',
+    GREATEST(
+        COALESCE(
+            (
+                SELECT MAX(SUBSTRING(patient_code FROM 3)::BIGINT)
+                FROM patients
+                WHERE patient_code ~ '^BN[0-9]{1,18}$'
+            ),
+            0
+        ) + 1,
+        1
+    ),
+    FALSE
+);
+
+
 -- ============================================================
 -- DONE
 -- ============================================================

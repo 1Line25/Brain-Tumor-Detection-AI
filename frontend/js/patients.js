@@ -122,7 +122,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     btnAdd.addEventListener('click', () => {
         modalTitle.textContent = 'Thêm Bệnh nhân';
-        document.getElementById('patient-code').disabled = false;
         openModal();
     });
 
@@ -133,10 +132,6 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const patient = await apiFetch(`/patients/${id}`);
             document.getElementById('patient-id').value = patient.id;
-            
-            const codeInput = document.getElementById('patient-code');
-            codeInput.value = patient.patient_code;
-            codeInput.disabled = true; // Cannot edit code
             
             document.getElementById('full-name').value = patient.full_name;
             document.getElementById('dob').value = patient.date_of_birth || '';
@@ -161,7 +156,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const id = document.getElementById('patient-id').value;
         const payload = {
-            patient_code: document.getElementById('patient-code').value,
             full_name: document.getElementById('full-name').value,
             date_of_birth: document.getElementById('dob').value || null,
             sex: document.getElementById('sex').value,
@@ -175,7 +169,6 @@ document.addEventListener('DOMContentLoaded', () => {
             
             if (id) {
                 // Update
-                delete payload.patient_code; // Do not send code on update
                 await apiFetch(`/patients/${id}`, {
                     method: 'PATCH',
                     body: payload

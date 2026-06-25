@@ -37,8 +37,8 @@ def create_patient(
     """
     Tạo hồ sơ bệnh nhân mới.
 
-    created_by không lấy từ frontend. Backend tự lấy từ user đang đăng nhập
-    để tránh giả mạo bác sĩ/người tạo hồ sơ.
+    Database tự sinh patient_code duy nhất. created_by không lấy từ frontend;
+    backend tự lấy từ user đang đăng nhập để tránh giả mạo người tạo hồ sơ.
     """
 
     try:

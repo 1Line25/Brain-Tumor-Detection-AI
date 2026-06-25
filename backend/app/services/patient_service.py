@@ -102,7 +102,6 @@ class PatientService:
         """
 
         patient = Patient(
-            patient_code=data.patient_code,
             full_name=data.full_name,
             date_of_birth=data.date_of_birth,
             sex=data.sex,
@@ -114,11 +113,12 @@ class PatientService:
         self.db.add(patient)
 
         try:
-            # Flush sớm để bắt lỗi trùng patient_code.
+            # Flush để PostgreSQL sinh patient_code và trả mã về ngay trong
+            # response/audit log.
             self.db.flush()
         except IntegrityError as exc:
             self.db.rollback()
-            raise ValueError("Patient code already exists") from exc
+            raise ValueError("Could not create a unique patient code") from exc
 
         return patient
 

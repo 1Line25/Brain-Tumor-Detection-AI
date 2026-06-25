@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         tableBody.innerHTML = items.map(p => {
             const date = new Date(p.created_at).toLocaleString('vi-VN');
-            const patientName = p.patient ? p.patient.full_name : 'N/A';
+            const patientCode = p.patient ? p.patient.patient_code : 'N/A';
             const doctorName = p.doctor ? p.doctor.username : 'N/A';
             const mappedClass = labelMap[p.predicted_class] || { label: p.predicted_class, badge: '' };
             const conf = `${(p.confidence * 100).toFixed(2)}%`;
@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return `
                 <tr>
                     <td>${date}</td>
-                    <td>${patientName}</td>
+                    <td><strong>${patientCode}</strong></td>
                     <td>${doctorName}</td>
                     <td><span class="badge ${mappedClass.badge}">${mappedClass.label}</span></td>
                     <td>${conf}</td>

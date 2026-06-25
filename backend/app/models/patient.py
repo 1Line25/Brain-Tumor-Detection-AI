@@ -5,7 +5,7 @@ from datetime import date
 from typing import TYPE_CHECKING
 from uuid import UUID
 
-from sqlalchemy import CheckConstraint, Enum, ForeignKey, Index, String, Text
+from sqlalchemy import CheckConstraint, Enum, ForeignKey, Index, String, Text, text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base
@@ -43,13 +43,17 @@ class Patient(UUIDPrimaryKeyMixin, TimestampMixin, Base):
 
     __tablename__ = "patients"
 
-    # Mã bệnh nhân nội bộ của hệ thống.
-    # Có unique để tránh tạo trùng hồ sơ.
+    # Mã bệnh nhân do PostgreSQL tự sinh theo dạng BN000001.
+    # Sequence xử lý an toàn cả khi nhiều hồ sơ được tạo đồng thời; unique
+    # constraint là lớp bảo vệ cuối cùng chống trùng mã.
     patient_code: Mapped[str] = mapped_column(
         String(40),
         unique=True,
         nullable=False,
         index=True,
+        server_default=text(
+            "('BN' || LPAD(nextval('patient_code_seq')::TEXT, 6, '0'))"
+        ),
         comment="Mã bệnh nhân duy nhất trong hệ thống",
     )
 
