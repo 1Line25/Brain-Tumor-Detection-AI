@@ -75,6 +75,11 @@ body {
   background-color: var(--error-color);
   color: white;
 }
+.btn-sm {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  text-decoration: none;
+}
 
 /* Forms */
 .form-group {
@@ -262,6 +267,12 @@ th {
 tbody tr:hover {
   background-color: rgba(0,0,0,0.03);
 }
+.patient-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+}
 
 /* Badges */
 .badge {
@@ -362,8 +373,288 @@ tbody tr:hover {
   grid-template-columns: 1fr 1fr;
   gap: 1.5rem;
 }
+
+/* Patient autocomplete on prediction form */
+.patient-search-wrapper {
+  position: relative;
+}
+.patient-search-hint {
+  margin-top: 0.35rem;
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+}
+.patient-suggestions {
+  position: absolute;
+  z-index: 20;
+  top: calc(100% + 0.375rem);
+  left: 0;
+  right: 0;
+  max-height: 300px;
+  overflow-y: auto;
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  background: rgba(255, 255, 255, 0.98);
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.16);
+}
+.patient-suggestion-item {
+  display: block;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 0;
+  border-bottom: 1px solid var(--border-color);
+  background: transparent;
+  color: var(--text-primary);
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+}
+.patient-suggestion-item:last-child {
+  border-bottom: 0;
+}
+.patient-suggestion-item:hover,
+.patient-suggestion-item.active {
+  background: rgba(0, 119, 182, 0.1);
+}
+.patient-suggestion-main {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+.patient-suggestion-main strong {
+  color: var(--primary-color);
+}
+.patient-suggestion-item small {
+  display: block;
+  margin-top: 0.2rem;
+  color: var(--text-secondary);
+}
+.patient-suggestion-message {
+  padding: 0.875rem 1rem;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+.selected-patient-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 0.75rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  border-radius: 0.5rem;
+  background: rgba(16, 185, 129, 0.08);
+}
+.selected-patient-card strong,
+.selected-patient-card span {
+  display: block;
+}
+.selected-patient-card strong {
+  color: #047857;
+}
+.selected-patient-card span {
+  margin-top: 0.15rem;
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+}
+
+/* Patient detail */
+.patient-detail-page {
+  max-width: 1280px;
+  width: 100%;
+  margin: 0 auto;
+}
+.patient-detail-header {
+  gap: 1rem;
+}
+.back-link {
+  display: inline-block;
+  margin-bottom: 0.5rem;
+  color: var(--primary-color);
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+.patient-info-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+.patient-info-item {
+  padding: 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  background: rgba(255, 255, 255, 0.45);
+}
+.patient-info-item span,
+.prediction-result-row > div > span {
+  display: block;
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  margin-bottom: 0.25rem;
+}
+.patient-info-item strong {
+  display: block;
+  overflow-wrap: anywhere;
+}
+.patient-info-notes {
+  grid-column: 1 / -1;
+}
+.patient-info-notes strong {
+  white-space: pre-wrap;
+  font-weight: 500;
+}
+.history-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.history-section-header small {
+  display: block;
+  color: var(--text-secondary);
+  font-weight: 400;
+  margin-top: 0.2rem;
+}
+.prediction-history {
+  display: grid;
+  gap: 1.25rem;
+}
+.prediction-history-item {
+  border: 1px solid var(--border-color);
+  border-radius: 0.625rem;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.55);
+}
+.prediction-history-top,
+.prediction-result-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+}
+.prediction-history-top {
+  border-bottom: 1px solid var(--border-color);
+}
+.prediction-date {
+  font-weight: 600;
+}
+.prediction-doctor {
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  margin-top: 0.15rem;
+}
+.prediction-status {
+  padding: 0.25rem 0.625rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+.prediction-status.success {
+  color: #047857;
+  background: rgba(16, 185, 129, 0.16);
+}
+.prediction-status.failed {
+  color: #b91c1c;
+  background: rgba(239, 68, 68, 0.16);
+}
+.prediction-result-row {
+  background: rgba(0, 119, 182, 0.04);
+}
+.prediction-result-row > div:last-child {
+  text-align: right;
+}
+.confidence-value {
+  color: var(--success-color);
+  font-size: 1.125rem;
+}
+.prediction-images {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  padding: 0 1.25rem 1.25rem;
+}
+.prediction-images figure {
+  min-width: 0;
+}
+.prediction-images img,
+.image-placeholder {
+  display: block;
+  width: 100%;
+  height: 260px;
+  object-fit: contain;
+  background: #07111d;
+  border-radius: 0.5rem;
+}
+.image-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #cbd5e1;
+  font-size: 0.875rem;
+}
+.prediction-images figcaption {
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  margin-top: 0.5rem;
+}
+.prediction-files-unavailable {
+  margin: 0 1.25rem 1.25rem;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  background: rgba(245, 158, 11, 0.12);
+  color: #92400e;
+  font-size: 0.875rem;
+}
+.prediction-probabilities {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem 1rem;
+  margin: 0 1.25rem 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-color);
+}
+.prediction-probabilities > span {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+}
+.prediction-probabilities strong {
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+.detail-loading,
+.empty-history {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-secondary);
+}
+.empty-history p {
+  margin: 0.35rem 0 1rem;
+}
+
 @media (max-width: 768px) {
   .gradcam-container { grid-template-columns: 1fr; }
   .app-container { flex-direction: column; }
   .sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--border-color); }
+  .patient-detail-header,
+  .prediction-history-top,
+  .prediction-result-row {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .patient-info-grid,
+  .prediction-images,
+  .prediction-probabilities {
+    grid-template-columns: 1fr;
+  }
+  .prediction-result-row > div:last-child {
+    text-align: left;
+  }
+  .selected-patient-card {
+    align-items: flex-start;
+    flex-direction: column;
+  }
 }

@@ -47,10 +47,35 @@
                     <div class="card-body">
                         <form id="prediction-form">
                             <div class="form-group">
-                                <label class="form-label" for="patient-select">Chọn Bệnh nhân</label>
-                                <select id="patient-select" class="form-control" required style="background-color: var(--bg-color);">
-                                    <option value="">-- Đang tải danh sách bệnh nhân --</option>
-                                </select>
+                                <label class="form-label" for="patient-search">Tìm và chọn Bệnh nhân</label>
+                                <div class="patient-search-wrapper">
+                                    <input
+                                        type="text"
+                                        id="patient-search"
+                                        class="form-control"
+                                        placeholder="Nhập mã, họ tên hoặc số điện thoại..."
+                                        autocomplete="off"
+                                        role="combobox"
+                                        aria-autocomplete="list"
+                                        aria-expanded="false"
+                                        aria-controls="patient-suggestions"
+                                    >
+                                    <input type="hidden" id="patient-id" name="patient_id">
+                                    <div
+                                        id="patient-suggestions"
+                                        class="patient-suggestions hidden"
+                                        role="listbox"
+                                    ></div>
+                                </div>
+                                <p class="patient-search-hint">Chọn đúng một hồ sơ trong danh sách gợi ý trước khi chẩn đoán.</p>
+
+                                <div id="selected-patient" class="selected-patient-card hidden">
+                                    <div>
+                                        <strong id="selected-patient-name">-</strong>
+                                        <span id="selected-patient-meta">-</span>
+                                    </div>
+                                    <button type="button" id="btn-change-patient" class="btn btn-outline btn-sm">Đổi bệnh nhân</button>
+                                </div>
                             </div>
 
                             <div class="form-group mt-2">

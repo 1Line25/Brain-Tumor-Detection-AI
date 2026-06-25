@@ -53,8 +53,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td>${sexMap[p.sex] || p.sex}</td>
                 <td>${p.phone_number || '-'}</td>
                 <td>
-                    <button class="btn btn-outline btn-sm btn-edit" data-id="${p.id}" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;">Sửa</button>
-                    <a href="prediction.html?patient_id=${p.id}" class="btn btn-primary btn-sm" style="padding: 0.25rem 0.5rem; font-size: 0.75rem; text-decoration: none;">Chẩn đoán MRI</a>
+                    <div class="patient-actions">
+                        <a href="patient-detail.html?patient_id=${p.id}" class="btn btn-outline btn-sm">Xem chi tiết</a>
+                        <button class="btn btn-outline btn-sm btn-edit" data-id="${p.id}">Sửa</button>
+                        <a href="prediction.html?patient_id=${p.id}" class="btn btn-primary btn-sm">Chẩn đoán MRI</a>
+                    </div>
                 </td>
             </tr>
         `).join('');
