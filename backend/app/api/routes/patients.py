@@ -10,6 +10,8 @@ from app.schemas.common import PaginatedResponse, PaginationParams
 from app.schemas.patient import (
     PatientCreate,
     PatientDetail,
+    PatientDuplicateCheck,
+    PatientDuplicateResult,
     PatientRead,
     PatientUpdate,
 )
@@ -21,6 +23,30 @@ router = APIRouter(
     prefix="/patients",
     tags=["Patients"],
 )
+
+
+@router.post(
+    "/duplicate-check",
+    response_model=PatientDuplicateResult,
+    status_code=status.HTTP_200_OK,
+)
+def check_patient_duplicates(
+    data: PatientDuplicateCheck,
+    db: DbSession,
+    current_user: DoctorOrAdminUser,
+) -> PatientDuplicateResult:
+    """Cảnh báo các hồ sơ có cùng số điện thoại hoặc cùng tên/ngày sinh."""
+
+    matches = PatientService(db).find_possible_duplicates(
+        data=data,
+        current_user=current_user,
+    )
+    return PatientDuplicateResult(
+        possible_duplicates=[
+            PatientRead.model_validate(patient)
+            for patient in matches
+        ],
+    )
 
 
 @router.post(

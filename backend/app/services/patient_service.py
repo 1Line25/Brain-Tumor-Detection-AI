@@ -9,7 +9,7 @@ from sqlalchemy.orm import Session, joinedload
 from app.models.patient import Patient
 from app.models.user import User, UserRole
 from app.schemas.common import PaginatedResponse, PaginationParams
-from app.schemas.patient import PatientCreate, PatientUpdate
+from app.schemas.patient import PatientCreate, PatientDuplicateCheck, PatientUpdate
 
 
 class PatientService:
@@ -121,6 +121,55 @@ class PatientService:
             raise ValueError("Could not create a unique patient code") from exc
 
         return patient
+
+    def find_possible_duplicates(
+        self,
+        *,
+        data: PatientDuplicateCheck,
+        current_user: User,
+    ) -> list[Patient]:
+        """
+        Tìm hồ sơ có cùng số điện thoại hoặc cùng họ tên và ngày sinh.
+
+        Đây là cảnh báo mềm vì người thân có thể dùng chung số điện thoại.
+        """
+
+        duplicate_conditions = []
+
+        if data.phone_number:
+            phone_variants = [data.phone_number]
+            if data.phone_number.startswith("0"):
+                phone_variants.append(f"+84{data.phone_number[1:]}")
+            duplicate_conditions.append(
+                Patient.phone_number.in_(phone_variants)
+            )
+
+        if data.date_of_birth:
+            duplicate_conditions.append(
+                (
+                    func.lower(Patient.full_name)
+                    == data.full_name.lower()
+                )
+                & (Patient.date_of_birth == data.date_of_birth)
+            )
+
+        if not duplicate_conditions:
+            return []
+
+        statement = (
+            select(Patient)
+            .where(or_(*duplicate_conditions))
+            .order_by(Patient.created_at.desc())
+            .limit(5)
+        )
+
+        if data.exclude_patient_id is not None:
+            statement = statement.where(
+                Patient.id != data.exclude_patient_id
+            )
+
+        statement = self._scope_to_current_user(statement, current_user)
+        return list(self.db.scalars(statement).all())
 
     def update(
         self,

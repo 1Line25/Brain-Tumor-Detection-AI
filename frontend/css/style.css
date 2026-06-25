@@ -267,9 +267,32 @@ th {
 tbody tr:hover {
   background-color: rgba(0,0,0,0.03);
 }
+.form-help {
+  display: block;
+  margin-top: 0.3rem;
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+}
+.duplicate-warning {
+  margin-top: 0.75rem;
+  padding: 0.875rem 1rem;
+  border: 1px solid rgba(245, 158, 11, 0.45);
+  border-radius: 0.5rem;
+  background: rgba(245, 158, 11, 0.12);
+  color: #92400e;
+  font-size: 0.82rem;
+}
+.duplicate-warning ul {
+  margin: 0.4rem 0 0 1.25rem;
+}
 .patient-actions {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+}
+.user-actions {
+  display: flex;
   flex-wrap: wrap;
   gap: 0.375rem;
 }
@@ -288,6 +311,8 @@ tbody tr:hover {
 .badge-notumor { background-color: rgba(14, 165, 233, 0.2); color: #0369a1; }
 .badge-admin { background-color: rgba(239, 68, 68, 0.2); color: #b91c1c; }
 .badge-doctor { background-color: rgba(16, 185, 129, 0.2); color: #047857; }
+.status-active { background-color: rgba(16, 185, 129, 0.2); color: #047857; }
+.status-inactive { background-color: rgba(239, 68, 68, 0.2); color: #b91c1c; }
 
 /* Pagination */
 .pagination {
@@ -565,6 +590,77 @@ tbody tr:hover {
   font-size: 0.75rem;
 }
 
+/* Dashboard */
+.dashboard-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+.dashboard-stat-card {
+  padding: 1.25rem;
+  border: 1px solid var(--border-color);
+  border-radius: 0.625rem;
+  background: var(--panel-bg);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+}
+.dashboard-stat-card span,
+.dashboard-stat-card strong,
+.dashboard-stat-card small {
+  display: block;
+}
+.dashboard-stat-card span {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+}
+.dashboard-stat-card strong {
+  margin: 0.35rem 0;
+  color: var(--primary-color);
+  font-size: 1.75rem;
+}
+.dashboard-stat-card small {
+  color: var(--text-secondary);
+  font-size: 0.72rem;
+}
+.dashboard-content-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(280px, 1fr);
+  gap: 1rem;
+}
+.result-distribution {
+  display: grid;
+  gap: 1rem;
+}
+.distribution-row-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.35rem;
+  font-size: 0.82rem;
+}
+.distribution-track {
+  height: 0.65rem;
+  overflow: hidden;
+  border-radius: 9999px;
+  background: rgba(148, 163, 184, 0.2);
+}
+.distribution-bar {
+  height: 100%;
+  min-width: 0;
+  border-radius: inherit;
+  transition: width 0.35s ease;
+}
+.dashboard-intro {
+  color: var(--text-secondary);
+  margin-bottom: 1rem;
+}
+.dashboard-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
 /* Patient detail */
 .patient-detail-page {
   max-width: 1280px;
@@ -774,10 +870,17 @@ tbody tr:hover {
     align-items: flex-start;
     flex-direction: column;
   }
+  .dashboard-stat-grid,
+  .dashboard-content-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (min-width: 769px) and (max-width: 1100px) {
   .history-filter-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .dashboard-stat-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }

@@ -74,11 +74,12 @@
     <div id="user-modal" class="modal-overlay hidden">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title">Tạo Tài khoản mới</h3>
+                <h3 class="modal-title" id="user-modal-title">Tạo Tài khoản mới</h3>
                 <button class="modal-close" id="btn-close-modal">&times;</button>
             </div>
             <div class="modal-body">
                 <form id="user-form">
+                    <input type="hidden" id="user-id">
                     <div class="form-group">
                         <label class="form-label" for="username">Tên đăng nhập</label>
                         <input type="text" id="username" class="form-control" required>
@@ -94,9 +95,10 @@
                         <input type="text" id="full-name" class="form-control" required minlength="2">
                     </div>
                     
-                    <div class="form-group">
+                    <div class="form-group" id="password-group">
                         <label class="form-label" for="password">Mật khẩu</label>
-                        <input type="password" id="password" class="form-control" required>
+                        <input type="password" id="password" class="form-control" minlength="8">
+                        <small class="form-help">Tối thiểu 8 ký tự.</small>
                     </div>
 
                     <div class="form-group">
@@ -112,7 +114,37 @@
             </div>
             <div class="modal-footer">
                 <button class="btn btn-outline" id="btn-cancel">Hủy</button>
-                <button class="btn btn-primary" id="btn-save">Tạo tài khoản</button>
+                <button class="btn btn-primary" id="btn-save">Lưu tài khoản</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="password-reset-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div>
+                    <h3 class="modal-title">Đặt lại mật khẩu</h3>
+                    <p id="password-reset-user" class="modal-subtitle"></p>
+                </div>
+                <button class="modal-close" id="btn-close-password-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="password-reset-form">
+                    <input type="hidden" id="password-reset-user-id">
+                    <div class="form-group">
+                        <label class="form-label" for="new-password">Mật khẩu mới</label>
+                        <input type="password" id="new-password" class="form-control" minlength="8" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="confirm-password">Nhập lại mật khẩu mới</label>
+                        <input type="password" id="confirm-password" class="form-control" minlength="8" required>
+                    </div>
+                    <div id="password-reset-error" class="text-error hidden"></div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="btn-cancel-password-reset">Hủy</button>
+                <button class="btn btn-primary" id="btn-save-password">Đặt lại mật khẩu</button>
             </div>
         </div>
     </div>

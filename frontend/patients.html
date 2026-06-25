@@ -110,7 +110,14 @@
                     
                     <div class="form-group">
                         <label class="form-label" for="phone">Số điện thoại</label>
-                        <input type="text" id="phone" class="form-control">
+                        <input
+                            type="tel"
+                            id="phone"
+                            class="form-control"
+                            maxlength="20"
+                            placeholder="Ví dụ: 0901234567 hoặc +84901234567"
+                        >
+                        <small class="form-help">Số trong nước bắt đầu bằng 0 và có 10–11 chữ số; số quốc tế bắt đầu bằng +.</small>
                     </div>
                     
                     <div class="form-group">
@@ -119,6 +126,7 @@
                     </div>
                     
                     <div id="form-error" class="text-error hidden mb-1" style="font-size: 0.875rem;"></div>
+                    <div id="duplicate-warning" class="duplicate-warning hidden"></div>
                 </form>
             </div>
             <div class="modal-footer">

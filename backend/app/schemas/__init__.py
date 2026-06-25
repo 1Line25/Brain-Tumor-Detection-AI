@@ -18,7 +18,16 @@ from app.schemas.common import (
     PaginatedResponse,
     PaginationParams,
 )
-from app.schemas.patient import PatientCreate, PatientDetail, PatientRead, PatientSummary, PatientUpdate
+from app.schemas.patient import (
+    PatientCreate,
+    PatientDetail,
+    PatientDuplicateCheck,
+    PatientDuplicateResult,
+    PatientRead,
+    PatientSummary,
+    PatientUpdate,
+)
+from app.schemas.dashboard import DashboardStatistics, TumorClassStatistic
 from app.schemas.prediction import (
     PredictionCreate,
     PredictionDetail,
@@ -39,6 +48,7 @@ from app.schemas.user import (
 
 __all__ = [
     "CurrentUserResponse",
+    "DashboardStatistics",
     "AuditLogFilter",
     "AuditLogRead",
     "ErrorResponse",
@@ -51,6 +61,8 @@ __all__ = [
     "PasswordResetByAdmin",
     "PatientCreate",
     "PatientDetail",
+    "PatientDuplicateCheck",
+    "PatientDuplicateResult",
     "PatientRead",
     "PatientSummary",
     "PatientUpdate",
@@ -62,6 +74,7 @@ __all__ = [
     "PredictionReviewUpdate",
     "PredictionResult",
     "TokenResponse",
+    "TumorClassStatistic",
     "UserCreate",
     "UserRead",
     "UserSummary",

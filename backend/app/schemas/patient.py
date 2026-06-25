@@ -1,12 +1,46 @@
 from __future__ import annotations
 
 from datetime import date, datetime
+import re
 from uuid import UUID
 
 from pydantic import BaseModel, Field, field_validator
 
 from app.models.patient import PatientSex
 from app.schemas.user import UserSummary
+
+
+def normalize_and_validate_phone(value: str | None) -> str | None:
+    """Chuẩn hóa số điện thoại về dạng nhất quán để kiểm tra và chống trùng."""
+
+    if value is None:
+        return None
+
+    compact = re.sub(r"[\s().-]", "", value.strip())
+    if not compact:
+        return None
+
+    # Chuẩn hóa số Việt Nam +84 về đầu 0 để 090... và +8490...
+    # được nhận diện là cùng một số khi cảnh báo hồ sơ trùng.
+    if compact.startswith("+84"):
+        compact = f"0{compact[3:]}"
+
+    if compact.startswith("+"):
+        digits = compact[1:]
+        if (
+            not digits.isdigit()
+            or not digits.startswith(tuple("123456789"))
+            or not 9 <= len(digits) <= 15
+        ):
+            raise ValueError(
+                "Số điện thoại quốc tế phải có dạng +[mã quốc gia][số điện thoại]"
+            )
+    elif not re.fullmatch(r"0\d{9,10}", compact):
+        raise ValueError(
+            "Số điện thoại trong nước phải bắt đầu bằng 0 và gồm 10 đến 11 chữ số"
+        )
+
+    return compact
 
 
 class PatientBase(BaseModel):
@@ -68,11 +102,7 @@ class PatientBase(BaseModel):
         nhưng vẫn loại bỏ khoảng trắng đầu/cuối.
         """
 
-        if value is None:
-            return None
-
-        value = value.strip()
-        return value or None
+        return normalize_and_validate_phone(value)
 
     @field_validator("notes")
     @classmethod
@@ -157,11 +187,7 @@ class PatientUpdate(BaseModel):
         Chuẩn hóa số điện thoại nếu field này được gửi lên.
         """
 
-        if value is None:
-            return None
-
-        value = value.strip()
-        return value or None
+        return normalize_and_validate_phone(value)
 
     @field_validator("notes")
     @classmethod
@@ -229,3 +255,28 @@ class PatientSummary(BaseModel):
     model_config = {
         "from_attributes": True,
     }
+
+
+class PatientDuplicateCheck(BaseModel):
+    """Thông tin dùng để tìm hồ sơ có khả năng bị tạo trùng."""
+
+    full_name: str = Field(..., min_length=2, max_length=120)
+    date_of_birth: date | None = None
+    phone_number: str | None = Field(default=None, max_length=20)
+    exclude_patient_id: UUID | None = None
+
+    @field_validator("full_name")
+    @classmethod
+    def normalize_full_name(cls, value: str) -> str:
+        return " ".join(value.strip().split())
+
+    @field_validator("phone_number")
+    @classmethod
+    def normalize_phone_number(cls, value: str | None) -> str | None:
+        return normalize_and_validate_phone(value)
+
+
+class PatientDuplicateResult(BaseModel):
+    """Danh sách hồ sơ gần giống để frontend cảnh báo người dùng."""
+
+    possible_duplicates: list[PatientRead] = Field(default_factory=list)

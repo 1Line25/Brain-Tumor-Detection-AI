@@ -42,15 +42,53 @@
                 <div class="page-header">
                     <h2>Chào mừng trở lại!</h2>
                 </div>
-                
-                <div class="card">
-                    <div class="card-body">
-                        <p style="color: var(--text-secondary); margin-bottom: 1rem;">Hệ thống Hỗ trợ Chẩn đoán U Não bằng Trí tuệ Nhân tạo.</p>
-                        <p>Bạn có thể quản lý hồ sơ bệnh nhân, tải lên ảnh chụp MRI và nhận kết quả dự đoán loại u não (Glioma, Meningioma, Pituitary, hoặc Không có u).</p>
-                        
-                        <div style="margin-top: 2rem; display: flex; gap: 1rem;">
-                            <a href="patients.html" class="btn btn-primary">Xem Bệnh nhân</a>
-                            <a href="prediction.html" class="btn btn-outline">Tải ảnh MRI mới</a>
+
+                <div id="dashboard-error" class="card hidden">
+                    <div class="card-body text-error"></div>
+                </div>
+
+                <div class="dashboard-stat-grid">
+                    <div class="dashboard-stat-card">
+                        <span>Tổng bệnh nhân</span>
+                        <strong id="stat-patients">-</strong>
+                        <small>Hồ sơ trong phạm vi quản lý</small>
+                    </div>
+                    <div class="dashboard-stat-card">
+                        <span>Tổng lần dự đoán</span>
+                        <strong id="stat-predictions">-</strong>
+                        <small id="stat-prediction-detail">Đang tải...</small>
+                    </div>
+                    <div class="dashboard-stat-card">
+                        <span>Tỷ lệ xử lý thành công</span>
+                        <strong id="stat-success-rate">-</strong>
+                        <small id="stat-success-detail">Đang tải...</small>
+                    </div>
+                    <div class="dashboard-stat-card">
+                        <span>Đã được bác sĩ đánh giá</span>
+                        <strong id="stat-review-rate">-</strong>
+                        <small id="stat-review-detail">Đang tải...</small>
+                    </div>
+                </div>
+
+                <div class="dashboard-content-grid">
+                    <div class="card">
+                        <div class="card-header">Tỷ lệ kết quả dự đoán</div>
+                        <div class="card-body">
+                            <div id="result-distribution" class="result-distribution">
+                                <div class="detail-loading">Đang tải thống kê...</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">Thao tác nhanh</div>
+                        <div class="card-body">
+                            <p class="dashboard-intro">Quản lý hồ sơ bệnh nhân, thực hiện chẩn đoán MRI và theo dõi kết quả AI tại một nơi.</p>
+                            <div class="dashboard-actions">
+                                <a href="patients.html" class="btn btn-primary">Xem Bệnh nhân</a>
+                                <a href="prediction.html" class="btn btn-outline">Tải ảnh MRI mới</a>
+                                <a href="history.html" class="btn btn-outline">Xem lịch sử</a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -60,5 +98,6 @@
 
     <script src="js/api.js"></script>
     <script src="js/auth.js"></script>
+    <script src="js/dashboard.js"></script>
 </body>
 </html>

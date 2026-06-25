@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('patient-form');
     const modalTitle = document.getElementById('modal-title');
     const formError = document.getElementById('form-error');
+    const duplicateWarning = document.getElementById('duplicate-warning');
 
     // Load Data
     async function loadPatients(page = 1, keyword = '') {
@@ -115,12 +116,14 @@ document.addEventListener('DOMContentLoaded', () => {
     function openModal() {
         modal.classList.remove('hidden');
         formError.classList.add('hidden');
+        duplicateWarning.classList.add('hidden');
     }
 
     function closeModal() {
         modal.classList.add('hidden');
         form.reset();
         document.getElementById('patient-id').value = '';
+        duplicateWarning.textContent = '';
     }
 
     btnAdd.addEventListener('click', () => {
@@ -130,6 +133,54 @@ document.addEventListener('DOMContentLoaded', () => {
 
     btnClose.addEventListener('click', closeModal);
     btnCancel.addEventListener('click', closeModal);
+
+    function normalizePhone(value) {
+        const compact = value.trim().replace(/[\s().-]/g, '');
+        return compact.startsWith('+84')
+            ? `0${compact.slice(3)}`
+            : compact;
+    }
+
+    function validatePhone(value) {
+        if (!value) return true;
+        return value.startsWith('+')
+            ? /^\+[1-9]\d{8,14}$/.test(value)
+            : /^0\d{9,10}$/.test(value);
+    }
+
+    async function confirmPossibleDuplicates(payload, patientId) {
+        const result = await apiFetch('/patients/duplicate-check', {
+            method: 'POST',
+            body: {
+                full_name: payload.full_name,
+                date_of_birth: payload.date_of_birth,
+                phone_number: payload.phone_number,
+                exclude_patient_id: patientId || null
+            }
+        });
+
+        const duplicates = result.possible_duplicates || [];
+        if (!duplicates.length) {
+            duplicateWarning.classList.add('hidden');
+            return true;
+        }
+
+        duplicateWarning.textContent = '';
+        const title = document.createElement('strong');
+        title.textContent = 'Phát hiện hồ sơ có khả năng bị trùng:';
+        const list = document.createElement('ul');
+        duplicates.forEach((patient) => {
+            const item = document.createElement('li');
+            item.textContent = `${patient.patient_code} - ${patient.full_name} - ${patient.date_of_birth || 'Chưa có ngày sinh'} - ${patient.phone_number || 'Chưa có SĐT'}`;
+            list.appendChild(item);
+        });
+        duplicateWarning.append(title, list);
+        duplicateWarning.classList.remove('hidden');
+
+        return confirm(
+            `Có ${duplicates.length} hồ sơ tương tự. Bạn vẫn muốn tiếp tục lưu hồ sơ này?`
+        );
+    }
 
     async function openEditModal(id) {
         try {
@@ -158,16 +209,31 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const id = document.getElementById('patient-id').value;
+        const normalizedPhone = normalizePhone(
+            document.getElementById('phone').value
+        );
+
+        if (!validatePhone(normalizedPhone)) {
+            formError.textContent = 'Số điện thoại không hợp lệ. Số trong nước phải bắt đầu bằng 0 và có 10–11 chữ số; số quốc tế bắt đầu bằng +.';
+            formError.classList.remove('hidden');
+            return;
+        }
+
         const payload = {
             full_name: document.getElementById('full-name').value,
             date_of_birth: document.getElementById('dob').value || null,
             sex: document.getElementById('sex').value,
-            phone_number: document.getElementById('phone').value || null,
+            phone_number: normalizedPhone || null,
             notes: document.getElementById('notes').value || null
         };
 
         try {
             btnSave.disabled = true;
+            btnSave.textContent = 'Đang kiểm tra...';
+
+            const shouldContinue = await confirmPossibleDuplicates(payload, id);
+            if (!shouldContinue) return;
+
             btnSave.textContent = 'Đang lưu...';
             
             if (id) {
