@@ -144,5 +144,3 @@ SET
 -- - 1 bác sĩ mẫu
 -- - 2 bệnh nhân mẫu
 --
--- Nếu quên thay __REPLACE_WITH_ARGON2_HASH__, tài khoản sẽ tồn tại
--- nhưng không đăng nhập đúng được vì password_hash không hợp lệ.

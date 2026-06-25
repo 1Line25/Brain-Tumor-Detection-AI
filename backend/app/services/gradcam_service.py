@@ -24,8 +24,8 @@ class GradCAMService:
         # Notebook train của dự án dùng IMG_SIZE = (240, 240).
         self.image_size = settings.model_input_size
 
-        # EfficientNetB0 nằm dưới dạng nested model; mặc định dùng top_conv.
-        # Nếu tên layer thay đổi, service sẽ tự tìm Conv2D cuối cùng.
+        # CNN hiện tại dùng conv2d_13. Nếu tên layer thay đổi, service sẽ tự
+        # tìm Conv2D cuối cùng.
         self.last_conv_layer_name = settings.gradcam_last_conv_layer_name
 
     def generate(
@@ -103,7 +103,7 @@ class GradCAMService:
         Tìm Conv2D layer cuối cùng trong model.
 
         Đây là fallback nếu config bị sai tên layer.
-        Với EfficientNetB0, kết quả mong đợi thường là top_conv.
+        Với CNN hiện tại, kết quả mong đợi là conv2d_13.
         """
 
         import tensorflow as tf
@@ -128,8 +128,7 @@ class GradCAMService:
         """
         Trả về model sở hữu layer, layer Conv2D đích và vị trí của layer.
 
-        EfficientNetB0 là một model lồng bên trong model phân loại, vì vậy gọi
-        root_model.get_layer("top_conv") trực tiếp sẽ không tìm thấy layer.
+        Hỗ trợ cả CNN tuần tự hiện tại và nested model nếu kiến trúc thay đổi.
         """
 
         configured = self._find_named_conv_layer(
@@ -205,8 +204,8 @@ class GradCAMService:
         """
         Dựng phần model từ output Conv2D đích đến output phân loại.
 
-        Với EfficientNetB0, phần này gồm các layer còn lại trong backbone rồi
-        đến GlobalAveragePooling/Dense head của root model.
+        Với CNN hiện tại, phần này gồm BatchNormalization, MaxPooling,
+        GlobalAveragePooling và Dense head còn lại sau lớp convolution đích.
         """
 
         classifier_input = tf.keras.Input(

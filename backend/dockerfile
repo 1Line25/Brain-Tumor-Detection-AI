@@ -6,7 +6,7 @@ FROM python:3.11-slim
 # Mục đích:
 # - Đóng gói FastAPI backend để demo/chạy ổn định.
 # - Chỉ phục vụ inference, không train model trong container.
-# - Model EfficientNetB0 best_tl_model.h5 được copy từ root project vào container.
+# - Model CNN best_cnn_model.h5 được copy từ root project vào container.
 # ============================================================
 
 
@@ -46,7 +46,7 @@ COPY backend/scripts /app/scripts
 
 # Copy model đã train từ root project.
 # Dự án không dùng folder model/, đúng theo yêu cầu của bạn.
-COPY best_tl_model.h5 /app/best_tl_model.h5
+COPY best_cnn_model.h5 /app/best_cnn_model.h5
 
 
 # Tạo storage trong container để lưu MRI/Grad-CAM khi chạy demo.

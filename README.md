@@ -1,6 +1,6 @@
 # Brain Tumor Detection AI
 
-Hệ thống hỗ trợ phân loại ảnh MRI não bằng mô hình học sâu EfficientNetB0, kết hợp
+Hệ thống hỗ trợ phân loại ảnh MRI não bằng mô hình CNN, kết hợp
 quản lý bệnh nhân, lịch sử dự đoán, phân quyền người dùng và bản đồ Grad-CAM giải
 thích vùng ảnh mà mô hình tập trung.
 
@@ -41,7 +41,7 @@ bốn nhóm:
 Dự án bao gồm cả quy trình nghiên cứu mô hình và ứng dụng web:
 
 - notebook khám phá, tiền xử lý, huấn luyện và đánh giá dữ liệu;
-- backend FastAPI chạy inference bằng EfficientNetB0;
+- backend FastAPI chạy inference bằng CNN;
 - PostgreSQL lưu tài khoản, bệnh nhân, dự đoán và audit log;
 - frontend HTML/CSS/JavaScript phục vụ bác sĩ và quản trị viên;
 - Nginx chuyển tiếp API và ảnh MRI/Grad-CAM;
@@ -79,8 +79,8 @@ Dự án bao gồm cả quy trình nghiên cứu mô hình và ứng dụng web:
 
 ## Mô hình AI
 
-Backend sử dụng model `best_tl_model.h5` dựa trên **EfficientNetB0**, nhận tensor
-RGB kích thước `240 × 240`.
+Backend sử dụng model **CNN Baseline** trong file `best_cnn_model.h5`, nhận tensor
+RGB kích thước `240 × 240`. Model chứa sẵn lớp `Rescaling(1/255)`.
 
 Kết quả đánh giá hiện có:
 
@@ -89,9 +89,10 @@ Kết quả đánh giá hiện có:
 | CNN Tuned | 0.7497 | 0.7551 | 0.7516 | 0.7438 |
 | EfficientNetB0 Tuned | **0.8862** | **0.8866** | **0.8874** | **0.8854** |
 
-EfficientNetB0 là model có kết quả tốt nhất và cũng là model được triển khai
-trong backend. Grad-CAM được tạo từ lớp convolution phù hợp để minh họa vùng ảnh
-ảnh hưởng tới dự đoán.
+EfficientNetB0 vẫn có kết quả thử nghiệm cao hơn trong bảng so sánh, nhưng phiên
+bản triển khai hiện tại chủ động sử dụng **CNN Tuned**. Grad-CAM được tạo từ lớp
+convolution cuối `conv2d_13` và có cơ chế tự tìm lớp Conv2D cuối nếu tên layer
+thay đổi.
 
 ## Kiến trúc hệ thống
 
@@ -104,7 +105,7 @@ Nginx frontend :8080
     |-- /api/*            -> FastAPI :8000
     `-- /storage/*        -> ảnh MRI và Grad-CAM
                               |
-                              +-- EfficientNetB0
+                              +-- CNN
                               +-- PostgreSQL :5432
                               `-- storage/
 ```
@@ -124,7 +125,7 @@ Các thành phần Docker:
 
 - Docker Desktop hoặc Docker Engine có Docker Compose.
 - Ít nhất khoảng 4 GB RAM trống để nạp TensorFlow và model.
-- File `best_tl_model.h5` nằm ở thư mục gốc dự án.
+- File `best_cnn_model.h5` nằm ở thư mục gốc dự án.
 
 ### Khi chạy Python trực tiếp
 
@@ -145,7 +146,7 @@ sử dụng font Inter từ Google Fonts.
 
 ```text
 Brain-Tumor-Detection-AI/
-  best_tl_model.h5
+  best_cnn_model.h5
   docker-compose.yml
   requirement.txt
 ```
@@ -282,9 +283,6 @@ source .venv/bin/activate
 pip install -r requirement.txt
 ```
 
-File duy nhất này chia dependency thành bốn nhóm: dùng chung, backend, frontend
-và train model.
-
 ### 3. Chuẩn bị PostgreSQL
 
 Tạo database theo thông tin trong `.env`, sau đó chạy:
@@ -302,7 +300,7 @@ Từ thư mục `backend`:
 uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-Backend mặc định đọc model tại `best_tl_model.h5` ở thư mục gốc và lưu ảnh vào
+Backend mặc định đọc model tại `best_cnn_model.h5` ở thư mục gốc và lưu ảnh vào
 `storage/`.
 
 > Frontend dựa vào Nginx để proxy `/api/` và `/storage/`. Vì vậy, để dùng giao
@@ -427,7 +425,7 @@ Brain-Tumor-Detection-AI/
 |-- storage/
 |   |-- mri/
 |   `-- gradcam/
-|-- best_tl_model.h5
+|-- best_cnn_model.h5
 |-- docker-compose.yml
 |-- requirement.txt
 |-- .env.example
@@ -454,7 +452,7 @@ Nguồn file ngoài của dự án:
 
 Sau khi huấn luyện lại, model triển khai phải:
 
-- được lưu với tên `best_tl_model.h5`;
+- được lưu với tên `best_cnn_model.h5`;
 - nhận ảnh RGB kích thước `240 × 240`;
 - xuất bốn xác suất theo đúng thứ tự:
   `glioma_tumor`, `meningioma_tumor`, `no_tumor`, `pituitary_tumor`.
@@ -476,7 +474,7 @@ curl http://localhost:8000/health
 
 Nguyên nhân thường gặp:
 
-- thiếu hoặc hỏng `best_tl_model.h5`;
+- thiếu hoặc hỏng `best_cnn_model.h5`;
 - PostgreSQL chưa sẵn sàng;
 - model không tương thích phiên bản TensorFlow;
 - máy không đủ RAM để load model.

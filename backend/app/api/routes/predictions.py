@@ -60,7 +60,7 @@ def create_prediction(
     Backend sẽ:
     - kiểm tra bệnh nhân tồn tại,
     - lưu ảnh MRI vào storage,
-    - chạy model EfficientNetB0 best_tl_model.h5,
+    - chạy model CNN best_cnn_model.h5,
     - tạo Grad-CAM,
     - lưu lịch sử dự đoán vào database.
     """

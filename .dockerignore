@@ -4,7 +4,7 @@
 # Mục đích:
 # - Giảm dung lượng gửi vào Docker daemon khi build.
 # - Tránh copy dữ liệu demo, notebook, cache và file nhạy cảm vào image.
-# - Không ignore best_tl_model.h5 vì backend cần copy model này.
+# - Không ignore best_cnn_model.h5 vì backend cần copy model này.
 
 
 # Git/cache
@@ -40,8 +40,8 @@ image/
 storage/
 
 
-# CNN cũ không còn được đóng gói vào backend.
-best_cnn_model.h5
+# EfficientNetB0 không còn được đóng gói vào backend.
+best_tl_model.h5
 
 
 # Logs/temp files

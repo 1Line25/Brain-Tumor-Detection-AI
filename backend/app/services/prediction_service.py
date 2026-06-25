@@ -26,7 +26,7 @@ class PredictionService:
 
     Nhiệm vụ chính:
     - Lưu ảnh MRI upload vào storage.
-    - Gọi model EfficientNetB0 best_tl_model.h5 để phân loại.
+    - Gọi model CNN best_cnn_model.h5 để phân loại.
     - Tạo ảnh Grad-CAM giải thích vùng model tập trung.
     - Ghi lịch sử dự đoán vào database.
 

@@ -50,8 +50,8 @@ class Settings(BaseSettings):
     database_pool_size: int = Field(default=5, ge=1, le=50)
     database_max_overflow: int = Field(default=10, ge=0, le=100)
 
-    # Backend dùng model EfficientNetB0 tốt nhất đã train ở thư mục gốc.
-    model_path: Path = PROJECT_ROOT / "best_tl_model.h5"
+    # Backend dùng model CNN đã train ở thư mục gốc.
+    model_path: Path = PROJECT_ROOT / "best_cnn_model.h5"
 
     # Notebook train của dự án dùng IMG_SIZE = (240, 240).
     model_input_size: tuple[int, int] = (240, 240)
@@ -65,9 +65,9 @@ class Settings(BaseSettings):
         "pituitary_tumor",
     )
 
-    # Conv2D cuối của EfficientNetB0. GradCAMService vẫn tự tìm fallback nếu
-    # kiến trúc model hoặc tên layer thay đổi.
-    gradcam_last_conv_layer_name: str = "top_conv"
+    # Conv2D cuối của CNN. GradCAMService vẫn tự tìm fallback nếu kiến trúc
+    # model hoặc tên layer thay đổi.
+    gradcam_last_conv_layer_name: str = "conv2d_13"
 
     # Storage lưu ảnh MRI và Grad-CAM.
     storage_root: Path = PROJECT_ROOT / "storage"

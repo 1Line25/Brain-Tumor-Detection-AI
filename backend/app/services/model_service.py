@@ -46,7 +46,7 @@ class ModelHealthStatus:
 
 class ModelService:
     """
-    Service chạy inference với EfficientNetB0 trong best_tl_model.h5.
+    Service chạy inference với CNN trong best_cnn_model.h5.
 
     Tối ưu:
     - Lazy-load model: chỉ load khi request đầu tiên cần dự đoán.
@@ -100,7 +100,7 @@ class ModelService:
 
     def get_model(self):
         """
-        Load model EfficientNetB0 từ best_tl_model.h5 nếu chưa load.
+        Load model CNN từ best_cnn_model.h5 nếu chưa load.
 
         TensorFlow được import trong hàm để các tác vụ không cần inference
         như migration/database check không bị khởi động nặng.
@@ -287,7 +287,7 @@ class ModelService:
         Khớp notebook train:
         - resize về 240x240,
         - chuyển RGB,
-        - giữ pixel ở thang 0..255 vì EfficientNetB0 có preprocessing nội bộ,
+        - giữ pixel ở thang 0..255 vì CNN có lớp Rescaling(1/255) nội bộ,
         - thêm batch dimension: (H, W, C) -> (1, H, W, C).
         """
 
@@ -295,7 +295,7 @@ class ModelService:
             image = source_image.convert("RGB").resize(self.image_size)
             image_array = np.asarray(image, dtype=np.float32)
 
-        # EfficientNetB0 của Keras có preprocessing nội bộ và nhận float 0..255.
+        # CNN đã chứa Rescaling(1/255), vì vậy backend truyền float 0..255.
         return np.expand_dims(image_array, axis=0)
 
     def _parse_prediction(self, raw_prediction) -> ModelPrediction:
