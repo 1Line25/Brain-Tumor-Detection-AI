@@ -63,6 +63,18 @@ END $$;
 
 DO $$
 BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'prediction_review_status') THEN
+        CREATE TYPE prediction_review_status AS ENUM (
+            'pending',
+            'confirmed',
+            'rejected'
+        );
+    END IF;
+END $$;
+
+
+DO $$
+BEGIN
     IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'audit_action') THEN
         CREATE TYPE audit_action AS ENUM (
             'login',
@@ -80,6 +92,7 @@ BEGIN
             'create_prediction',
             'create_prediction_failed',
             'view_prediction',
+            'update_prediction_review',
             'delete_expired_files'
         );
     END IF;
@@ -93,6 +106,7 @@ ALTER TYPE audit_action ADD VALUE IF NOT EXISTS 'activate_user';
 ALTER TYPE audit_action ADD VALUE IF NOT EXISTS 'create_prediction_failed';
 ALTER TYPE audit_action ADD VALUE IF NOT EXISTS 'view_patient';
 ALTER TYPE audit_action ADD VALUE IF NOT EXISTS 'view_prediction';
+ALTER TYPE audit_action ADD VALUE IF NOT EXISTS 'update_prediction_review';
 
 
 -- ============================================================
@@ -292,6 +306,11 @@ CREATE TABLE IF NOT EXISTS predictions (
     status prediction_status NOT NULL DEFAULT 'success',
     error_message TEXT NULL,
 
+    review_status prediction_review_status NOT NULL DEFAULT 'pending',
+    clinical_conclusion TEXT NULL,
+    doctor_notes TEXT NULL,
+    reviewed_at TIMESTAMPTZ NULL,
+
     -- Sau thời điểm này, worker/API cleanup sẽ xóa file MRI và Grad-CAM.
     -- Record trong DB vẫn giữ lại để xem lịch sử.
     expires_at TIMESTAMPTZ NOT NULL,
@@ -317,6 +336,20 @@ CREATE TABLE IF NOT EXISTS predictions (
         CHECK (status != 'failed' OR error_message IS NOT NULL)
 );
 
+-- Bổ sung các cột đánh giá cho database đã tồn tại từ phiên bản trước.
+ALTER TABLE predictions
+ADD COLUMN IF NOT EXISTS review_status prediction_review_status
+NOT NULL DEFAULT 'pending';
+
+ALTER TABLE predictions
+ADD COLUMN IF NOT EXISTS clinical_conclusion TEXT NULL;
+
+ALTER TABLE predictions
+ADD COLUMN IF NOT EXISTS doctor_notes TEXT NULL;
+
+ALTER TABLE predictions
+ADD COLUMN IF NOT EXISTS reviewed_at TIMESTAMPTZ NULL;
+
 
 CREATE INDEX IF NOT EXISTS ix_predictions_patient_id
 ON predictions (patient_id);
@@ -328,6 +361,10 @@ ON predictions (doctor_id);
 
 CREATE INDEX IF NOT EXISTS ix_predictions_status
 ON predictions (status);
+
+
+CREATE INDEX IF NOT EXISTS ix_predictions_review_status
+ON predictions (review_status);
 
 
 CREATE INDEX IF NOT EXISTS ix_predictions_expires_at

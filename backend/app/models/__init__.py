@@ -14,7 +14,12 @@ Lưu ý tối ưu:
 from app.models.audit_log import AuditAction, AuditLog
 from app.models.login_throttle import LoginThrottle
 from app.models.patient import Patient, PatientSex
-from app.models.prediction import Prediction, PredictionStatus, TumorClass
+from app.models.prediction import (
+    Prediction,
+    PredictionReviewStatus,
+    PredictionStatus,
+    TumorClass,
+)
 from app.models.user import User, UserRole
 
 __all__ = [
@@ -24,6 +29,7 @@ __all__ = [
     "Patient",
     "PatientSex",
     "Prediction",
+    "PredictionReviewStatus",
     "PredictionStatus",
     "TumorClass",
     "User",

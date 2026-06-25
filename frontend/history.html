@@ -43,23 +43,93 @@
                     <h2>Lịch sử Chẩn đoán MRI</h2>
                     <button id="btn-cleanup" class="btn btn-danger admin-only hidden">Xóa file hết hạn</button>
                 </div>
+
+                <div class="card history-filter-card">
+                    <div class="card-header">Tìm kiếm và lọc lịch sử</div>
+                    <div class="card-body">
+                        <form id="history-filter-form" class="history-filter-grid">
+                            <div class="form-group">
+                                <label class="form-label" for="filter-patient">Bệnh nhân</label>
+                                <input
+                                    id="filter-patient"
+                                    class="form-control"
+                                    type="text"
+                                    placeholder="Mã, tên hoặc số điện thoại"
+                                >
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="filter-doctor">Bác sĩ</label>
+                                <input
+                                    id="filter-doctor"
+                                    class="form-control"
+                                    type="text"
+                                    placeholder="Tên, tài khoản hoặc email"
+                                >
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="filter-from-date">Từ ngày</label>
+                                <input id="filter-from-date" class="form-control" type="date">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="filter-to-date">Đến ngày</label>
+                                <input id="filter-to-date" class="form-control" type="date">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="filter-class">Loại u</label>
+                                <select id="filter-class" class="form-control">
+                                    <option value="">Tất cả loại u</option>
+                                    <option value="glioma_tumor">Glioma</option>
+                                    <option value="meningioma_tumor">Meningioma</option>
+                                    <option value="pituitary_tumor">Pituitary</option>
+                                    <option value="no_tumor">Không phát hiện u</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="filter-status">Trạng thái xử lý</label>
+                                <select id="filter-status" class="form-control">
+                                    <option value="">Tất cả trạng thái</option>
+                                    <option value="success">Thành công</option>
+                                    <option value="failed">Thất bại</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="filter-review-status">Đánh giá AI</label>
+                                <select id="filter-review-status" class="form-control">
+                                    <option value="">Tất cả đánh giá</option>
+                                    <option value="pending">Chưa đánh giá</option>
+                                    <option value="confirmed">Xác nhận phù hợp</option>
+                                    <option value="rejected">Không đồng ý với AI</option>
+                                </select>
+                            </div>
+                            <div class="history-filter-actions">
+                                <button type="submit" class="btn btn-primary">Áp dụng</button>
+                                <button type="button" id="btn-reset-filters" class="btn btn-outline">Đặt lại</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
                 
                 <div class="card">
+                    <div class="card-header history-table-header">
+                        <span id="history-result-summary">Đang tải lịch sử...</span>
+                        <small>Chạm hoặc nhấn vào một dòng để xem chi tiết</small>
+                    </div>
                     <div class="card-body" style="padding: 0;">
                         <div class="table-container">
                             <table id="history-table">
                                 <thead>
                                     <tr>
                                         <th>Ngày giờ</th>
-                                        <th>Mã bệnh nhân</th>
+                                        <th>Bệnh nhân</th>
                                         <th>Bác sĩ</th>
                                         <th>Loại u</th>
                                         <th>Độ tin cậy</th>
-                                        <th>Tình trạng ảnh</th>
+                                        <th>Đánh giá AI</th>
+                                        <th>Thao tác</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr><td colspan="6" class="text-center">Đang tải dữ liệu...</td></tr>
+                                    <tr><td colspan="7" class="text-center">Đang tải dữ liệu...</td></tr>
                                 </tbody>
                             </table>
                         </div>
@@ -69,6 +139,75 @@
                 <div class="pagination" id="pagination"></div>
             </div>
         </main>
+    </div>
+
+    <div id="history-detail-modal" class="modal-overlay hidden">
+        <div class="modal-content history-detail-modal-content">
+            <div class="modal-header">
+                <div>
+                    <h3 class="modal-title">Chi tiết hồ sơ và dự đoán MRI</h3>
+                    <p id="history-detail-subtitle" class="modal-subtitle">Đang tải...</p>
+                </div>
+                <button class="modal-close" id="btn-close-history-detail" aria-label="Đóng">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="history-detail-loading" class="detail-loading">Đang tải thông tin chi tiết...</div>
+                <div id="history-detail-error" class="text-error hidden"></div>
+                <div id="history-detail-content" class="hidden">
+                    <section class="history-detail-section">
+                        <h4>Thông tin bệnh nhân</h4>
+                        <div id="history-patient-info" class="patient-info-grid"></div>
+                    </section>
+
+                    <section class="history-detail-section">
+                        <h4>Thông tin dự đoán MRI</h4>
+                        <div id="history-prediction-info"></div>
+                    </section>
+
+                    <section class="history-detail-section">
+                        <div class="review-section-heading">
+                            <h4>Đánh giá của bác sĩ</h4>
+                            <span id="review-permission-message"></span>
+                        </div>
+                        <form id="prediction-review-form">
+                            <div class="form-group">
+                                <label class="form-label" for="review-status">Xác nhận kết quả AI</label>
+                                <select id="review-status" class="form-control">
+                                    <option value="pending">Chưa đánh giá</option>
+                                    <option value="confirmed">Xác nhận phù hợp</option>
+                                    <option value="rejected">Không đồng ý với AI</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="clinical-conclusion">Kết luận của bác sĩ</label>
+                                <textarea
+                                    id="clinical-conclusion"
+                                    class="form-control"
+                                    rows="4"
+                                    maxlength="4000"
+                                    placeholder="Nhập kết luận chuyên môn..."
+                                ></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="doctor-notes">Ghi chú bổ sung</label>
+                                <textarea
+                                    id="doctor-notes"
+                                    class="form-control"
+                                    rows="3"
+                                    maxlength="4000"
+                                    placeholder="Nhập ghi chú theo dõi hoặc khuyến nghị..."
+                                ></textarea>
+                            </div>
+                            <div id="review-form-error" class="text-error hidden"></div>
+                        </form>
+                    </section>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="btn-close-history-detail-footer">Đóng</button>
+                <button class="btn btn-primary" id="btn-save-review">Lưu đánh giá</button>
+            </div>
+        </div>
     </div>
 
     <script src="js/api.js"></script>

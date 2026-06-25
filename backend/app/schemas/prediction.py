@@ -5,7 +5,11 @@ from uuid import UUID
 
 from pydantic import BaseModel, Field, field_validator
 
-from app.models.prediction import PredictionStatus, TumorClass
+from app.models.prediction import (
+    PredictionReviewStatus,
+    PredictionStatus,
+    TumorClass,
+)
 from app.schemas.patient import PatientSummary
 from app.schemas.user import UserSummary
 
@@ -57,6 +61,11 @@ class PredictionRead(BaseModel):
 
     status: PredictionStatus
     error_message: str | None
+
+    review_status: PredictionReviewStatus
+    clinical_conclusion: str | None
+    doctor_notes: str | None
+    reviewed_at: datetime | None
 
     expires_at: datetime
     files_deleted: bool
@@ -176,6 +185,31 @@ class PredictionFailed(BaseModel):
     )
 
 
+class PredictionReviewUpdate(BaseModel):
+    """Nội dung bác sĩ đánh giá một kết quả dự đoán AI."""
+
+    review_status: PredictionReviewStatus = Field(
+        default=PredictionReviewStatus.pending,
+    )
+    clinical_conclusion: str | None = Field(
+        default=None,
+        max_length=4000,
+    )
+    doctor_notes: str | None = Field(
+        default=None,
+        max_length=4000,
+    )
+
+    @field_validator("clinical_conclusion", "doctor_notes")
+    @classmethod
+    def normalize_optional_text(cls, value: str | None) -> str | None:
+        if value is None:
+            return None
+
+        normalized = value.strip()
+        return normalized or None
+
+
 class PredictionFilter(BaseModel):
     """
     Bộ lọc lịch sử dự đoán.
@@ -202,6 +236,23 @@ class PredictionFilter(BaseModel):
     status: PredictionStatus | None = Field(
         default=None,
         description="Lọc theo trạng thái dự đoán",
+    )
+
+    review_status: PredictionReviewStatus | None = Field(
+        default=None,
+        description="Lọc theo trạng thái bác sĩ đánh giá kết quả AI",
+    )
+
+    patient_keyword: str | None = Field(
+        default=None,
+        max_length=120,
+        description="Tìm theo mã, tên hoặc số điện thoại bệnh nhân",
+    )
+
+    doctor_keyword: str | None = Field(
+        default=None,
+        max_length=120,
+        description="Tìm theo username, họ tên hoặc email bác sĩ",
     )
 
     from_date: datetime | None = Field(

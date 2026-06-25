@@ -40,6 +40,7 @@ class AuditAction(str, enum.Enum):
     create_prediction = "create_prediction"
     create_prediction_failed = "create_prediction_failed"
     view_prediction = "view_prediction"
+    update_prediction_review = "update_prediction_review"
     delete_expired_files = "delete_expired_files"
 
 

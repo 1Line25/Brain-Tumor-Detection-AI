@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from datetime import datetime
 from uuid import UUID
 
 from fastapi import (
@@ -17,12 +18,17 @@ from fastapi.responses import JSONResponse
 
 from app.api.deps import AdminUser, DbSession, DoctorOrAdminUser
 from app.models.audit_log import AuditAction
-from app.models.prediction import PredictionStatus, TumorClass
+from app.models.prediction import (
+    PredictionReviewStatus,
+    PredictionStatus,
+    TumorClass,
+)
 from app.schemas.common import MessageResponse, PaginatedResponse, PaginationParams
 from app.schemas.prediction import (
     PredictionDetail,
     PredictionFailed,
     PredictionFilter,
+    PredictionReviewUpdate,
     PredictionResult,
 )
 from app.services.patient_service import PatientService
@@ -184,10 +190,21 @@ def list_predictions(
     doctor_id: UUID | None = Query(default=None),
     predicted_class: TumorClass | None = Query(default=None),
     prediction_status: PredictionStatus | None = Query(default=None),
+    review_status: PredictionReviewStatus | None = Query(default=None),
+    patient_keyword: str | None = Query(default=None, max_length=120),
+    doctor_keyword: str | None = Query(default=None, max_length=120),
+    from_date: datetime | None = Query(default=None),
+    to_date: datetime | None = Query(default=None),
 ) -> PaginatedResponse[PredictionDetail]:
     """
     Xem lịch sử dự đoán có phân trang và bộ lọc.
     """
+
+    if from_date and to_date and from_date > to_date:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="from_date must be earlier than or equal to to_date",
+        )
 
     pagination = PaginationParams(page=page, page_size=page_size)
     filters = PredictionFilter(
@@ -195,6 +212,11 @@ def list_predictions(
         doctor_id=doctor_id,
         predicted_class=predicted_class,
         status=prediction_status,
+        review_status=review_status,
+        patient_keyword=patient_keyword,
+        doctor_keyword=doctor_keyword,
+        from_date=from_date,
+        to_date=to_date,
     )
 
     result = PredictionService(db).list_predictions(
@@ -243,6 +265,65 @@ def cleanup_expired_files(
     return MessageResponse(
         message=f"Cleaned files for {deleted_count} expired prediction(s)"
     )
+
+
+@router.patch(
+    "/{prediction_id}/review",
+    response_model=PredictionDetail,
+    status_code=status.HTTP_200_OK,
+)
+def update_prediction_review(
+    prediction_id: UUID,
+    data: PredictionReviewUpdate,
+    request: Request,
+    db: DbSession,
+    current_user: DoctorOrAdminUser,
+) -> PredictionDetail:
+    """Bác sĩ lưu kết luận, ghi chú và xác nhận hoặc bác bỏ kết quả AI."""
+
+    service = PredictionService(db)
+    prediction = service.get_detail_by_id(
+        prediction_id,
+        current_user=current_user,
+    )
+
+    if prediction is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Prediction not found",
+        )
+
+    if prediction.doctor_id != current_user.id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Only the doctor who performed this prediction can review it",
+        )
+
+    try:
+        updated_prediction = service.update_review(
+            prediction=prediction,
+            data=data,
+        )
+        AuditService(db).log_request(
+            request=request,
+            action=AuditAction.update_prediction_review,
+            actor=current_user,
+            entity_type="prediction",
+            entity_id=updated_prediction.id,
+            metadata={
+                "patient_id": str(updated_prediction.patient_id),
+                "review_status": updated_prediction.review_status.value,
+            },
+        )
+        db.commit()
+        db.refresh(updated_prediction)
+        return PredictionDetail.model_validate(updated_prediction)
+    except ValueError as exc:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(exc),
+        ) from exc
 
 
 @router.get(

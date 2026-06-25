@@ -7,14 +7,18 @@ from uuid import UUID
 
 from fastapi import UploadFile
 from loguru import logger
-from sqlalchemy import func, select
+from sqlalchemy import func, or_, select
 from sqlalchemy.orm import Session, joinedload
 
 from app.models.patient import Patient
-from app.models.prediction import Prediction, PredictionStatus
+from app.models.prediction import (
+    Prediction,
+    PredictionReviewStatus,
+    PredictionStatus,
+)
 from app.models.user import User, UserRole
 from app.schemas.common import PaginatedResponse, PaginationParams
-from app.schemas.prediction import PredictionFilter
+from app.schemas.prediction import PredictionFilter, PredictionReviewUpdate
 from app.services.gradcam_service import GradCAMService
 from app.services.model_service import ModelService, ModelPrediction
 from app.services.storage_service import StorageService
@@ -238,6 +242,33 @@ class PredictionService:
             page_size=pagination.page_size,
         )
 
+    def update_review(
+        self,
+        *,
+        prediction: Prediction,
+        data: PredictionReviewUpdate,
+    ) -> Prediction:
+        """Lưu kết luận và trạng thái bác sĩ đánh giá kết quả AI."""
+
+        if prediction.status != PredictionStatus.success:
+            raise ValueError("Only successful predictions can be reviewed")
+
+        prediction.review_status = data.review_status
+        prediction.clinical_conclusion = data.clinical_conclusion
+        prediction.doctor_notes = data.doctor_notes
+
+        has_review_content = (
+            data.review_status != PredictionReviewStatus.pending
+            or data.clinical_conclusion is not None
+            or data.doctor_notes is not None
+        )
+        prediction.reviewed_at = (
+            datetime.now(timezone.utc) if has_review_content else None
+        )
+
+        self.db.flush()
+        return prediction
+
     def _scope_to_current_user(self, statement, current_user: User):
         """
         Thêm điều kiện sở hữu vào query prediction.
@@ -346,14 +377,48 @@ class PredictionService:
         if filters.patient_id is not None:
             conditions.append(Prediction.patient_id == filters.patient_id)
 
+        if filters.patient_keyword:
+            patient_keyword = f"%{filters.patient_keyword.strip()}%"
+            patient_code_keyword = (
+                f"%{filters.patient_keyword.strip().upper()}%"
+            )
+            matching_patient_ids = select(Patient.id).where(
+                or_(
+                    Patient.patient_code.ilike(patient_code_keyword),
+                    Patient.full_name.ilike(patient_keyword),
+                    Patient.phone_number.ilike(patient_keyword),
+                )
+            )
+            conditions.append(
+                Prediction.patient_id.in_(matching_patient_ids)
+            )
+
         if filters.doctor_id is not None:
             conditions.append(Prediction.doctor_id == filters.doctor_id)
+
+        if filters.doctor_keyword:
+            doctor_keyword = f"%{filters.doctor_keyword.strip()}%"
+            matching_doctor_ids = select(User.id).where(
+                or_(
+                    User.username.ilike(doctor_keyword),
+                    User.full_name.ilike(doctor_keyword),
+                    User.email.ilike(doctor_keyword),
+                )
+            )
+            conditions.append(
+                Prediction.doctor_id.in_(matching_doctor_ids)
+            )
 
         if filters.predicted_class is not None:
             conditions.append(Prediction.predicted_class == filters.predicted_class)
 
         if filters.status is not None:
             conditions.append(Prediction.status == filters.status)
+
+        if filters.review_status is not None:
+            conditions.append(
+                Prediction.review_status == filters.review_status
+            )
 
         if filters.from_date is not None:
             conditions.append(Prediction.created_at >= filters.from_date)

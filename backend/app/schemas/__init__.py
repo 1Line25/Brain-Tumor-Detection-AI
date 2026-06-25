@@ -25,6 +25,7 @@ from app.schemas.prediction import (
     PredictionFailed,
     PredictionFilter,
     PredictionRead,
+    PredictionReviewUpdate,
     PredictionResult,
 )
 from app.schemas.user import (
@@ -58,6 +59,7 @@ __all__ = [
     "PredictionFailed",
     "PredictionFilter",
     "PredictionRead",
+    "PredictionReviewUpdate",
     "PredictionResult",
     "TokenResponse",
     "UserCreate",

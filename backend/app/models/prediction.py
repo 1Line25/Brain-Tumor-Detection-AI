@@ -43,6 +43,14 @@ class PredictionStatus(str, enum.Enum):
     failed = "failed"
 
 
+class PredictionReviewStatus(str, enum.Enum):
+    """Trạng thái bác sĩ đánh giá kết quả do AI tạo ra."""
+
+    pending = "pending"
+    confirmed = "confirmed"
+    rejected = "rejected"
+
+
 class Prediction(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     """
     Model lưu lịch sử dự đoán MRI.
@@ -147,6 +155,36 @@ class Prediction(UUIDPrimaryKeyMixin, TimestampMixin, Base):
         Text,
         nullable=True,
         comment="Thông tin lỗi nếu dự đoán thất bại",
+    )
+
+    review_status: Mapped[PredictionReviewStatus] = mapped_column(
+        Enum(
+            PredictionReviewStatus,
+            name="prediction_review_status",
+            values_callable=lambda enum_class: [item.value for item in enum_class],
+        ),
+        nullable=False,
+        default=PredictionReviewStatus.pending,
+        server_default=PredictionReviewStatus.pending.value,
+        index=True,
+        comment="Trạng thái bác sĩ xác nhận hoặc bác bỏ kết quả AI",
+    )
+
+    clinical_conclusion: Mapped[str | None] = mapped_column(
+        Text,
+        nullable=True,
+        comment="Kết luận chuyên môn của bác sĩ cho lần dự đoán",
+    )
+
+    doctor_notes: Mapped[str | None] = mapped_column(
+        Text,
+        nullable=True,
+        comment="Ghi chú bổ sung của bác sĩ",
+    )
+
+    reviewed_at: Mapped[datetime | None] = mapped_column(
+        nullable=True,
+        comment="Thời điểm bác sĩ cập nhật đánh giá kết quả AI",
     )
 
     # Thời điểm file MRI và Grad-CAM hết hạn.

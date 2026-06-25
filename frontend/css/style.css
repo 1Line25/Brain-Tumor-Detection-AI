@@ -457,6 +457,114 @@ tbody tr:hover {
   font-size: 0.75rem;
 }
 
+/* Prediction history filters and detail */
+.history-filter-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.25rem 1rem;
+  align-items: end;
+}
+.history-filter-grid .form-group {
+  margin-bottom: 0.75rem;
+}
+.history-filter-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+.history-table-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.history-table-header small,
+.table-secondary-text {
+  display: block;
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  font-weight: 400;
+  margin-top: 0.15rem;
+}
+.history-clickable-row {
+  cursor: pointer;
+}
+.history-clickable-row:focus {
+  outline: 2px solid var(--primary-color);
+  outline-offset: -2px;
+  background-color: rgba(0, 119, 182, 0.08);
+}
+.review-badge {
+  display: inline-block;
+  padding: 0.2rem 0.55rem;
+  border-radius: 9999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.review-pending {
+  color: #92400e;
+  background: rgba(245, 158, 11, 0.16);
+}
+.review-confirmed {
+  color: #047857;
+  background: rgba(16, 185, 129, 0.16);
+}
+.review-rejected {
+  color: #b91c1c;
+  background: rgba(239, 68, 68, 0.16);
+}
+.history-detail-modal-content {
+  max-width: 1100px;
+}
+.modal-subtitle {
+  margin-top: 0.2rem;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+}
+.history-detail-section + .history-detail-section {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-color);
+}
+.history-detail-section h4 {
+  margin-bottom: 1rem;
+}
+.history-prediction-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+.history-prediction-summary > div {
+  padding: 0.75rem;
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  background: rgba(255, 255, 255, 0.45);
+}
+.history-prediction-summary span,
+.history-prediction-summary strong {
+  display: block;
+}
+.history-prediction-summary span {
+  margin-bottom: 0.25rem;
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+}
+.history-probabilities {
+  margin: 0;
+}
+.review-section-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.review-section-heading span {
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+}
+
 /* Patient detail */
 .patient-detail-page {
   max-width: 1280px;
@@ -656,5 +764,20 @@ tbody tr:hover {
   .selected-patient-card {
     align-items: flex-start;
     flex-direction: column;
+  }
+  .history-filter-grid,
+  .history-prediction-summary {
+    grid-template-columns: 1fr;
+  }
+  .history-table-header,
+  .review-section-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1100px) {
+  .history-filter-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
